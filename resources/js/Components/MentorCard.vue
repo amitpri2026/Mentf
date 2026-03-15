@@ -55,7 +55,7 @@
           <span class="text-xs text-slate-400">({{ mentor.total_reviews }})</span>
         </div>
         <div class="text-right">
-          <span class="text-sm font-bold text-slate-900">${{ mentor.hourly_rate }}</span>
+          <span class="text-sm font-bold text-slate-900">₹{{ mentor.hourly_rate }}</span>
           <span class="text-xs text-slate-400">/hr</span>
         </div>
       </div>

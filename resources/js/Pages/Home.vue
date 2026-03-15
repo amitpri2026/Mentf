@@ -118,7 +118,7 @@
                         <p class="font-semibold text-slate-900 text-sm">{{ pillCategories[currentCatIndex].profiles[1].name }}</p>
                         <p class="text-xs text-slate-500">{{ pillCategories[currentCatIndex].profiles[1].title }}</p>
                       </div>
-                      <span class="text-sm font-bold text-slate-700">${{ pillCategories[currentCatIndex].profiles[1].rate }}<span class="text-xs font-normal text-slate-400">/hr</span></span>
+                      <span class="text-sm font-bold text-slate-700">₹{{ pillCategories[currentCatIndex].profiles[1].rate }}<span class="text-xs font-normal text-slate-400">/hr</span></span>
                     </div>
                   </div>
 
@@ -159,7 +159,7 @@
                     <!-- Footer -->
                     <div class="flex items-center justify-between pt-3 border-t border-slate-100">
                       <div>
-                        <span class="text-lg font-bold text-slate-900">${{ pillCategories[currentCatIndex].profiles[0].rate }}</span>
+                        <span class="text-lg font-bold text-slate-900">₹{{ pillCategories[currentCatIndex].profiles[0].rate }}</span>
                         <span class="text-sm text-slate-400">/hr</span>
                       </div>
                       <Link href="/mentors" class="btn-primary text-xs px-4 py-2">View Profile</Link>

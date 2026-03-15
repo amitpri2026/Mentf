@@ -57,7 +57,7 @@
           <span class="text-sm font-bold text-slate-800">{{ pkg.avg_rating?.toFixed(1) || '0.0' }}</span>
           <span class="text-xs text-slate-400">({{ pkg.total_reviews }})</span>
         </div>
-        <span class="text-lg font-bold text-blue-600">${{ pkg.price }}</span>
+        <span class="text-lg font-bold text-blue-600">₹{{ pkg.price }}</span>
       </div>
     </div>
   </Link>

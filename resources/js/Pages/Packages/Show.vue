@@ -117,7 +117,7 @@
         <!-- Sidebar - Enroll card -->
         <div class="space-y-5">
           <div class="bg-white rounded-2xl border border-gray-100 p-6 sticky top-24">
-            <div class="text-4xl font-extrabold text-gray-900 mb-2">${{ pkg.price }}</div>
+            <div class="text-4xl font-extrabold text-gray-900 mb-2">₹{{ pkg.price }}</div>
             <p class="text-sm text-gray-500 mb-5">{{ pkg.sessions }} session{{ pkg.sessions !== 1 ? 's' : '' }}, {{ pkg.duration }}min each</p>
 
             <div v-if="isEnrolled" class="bg-green-50 text-green-700 text-center py-3 px-4 rounded-xl font-semibold mb-4 border border-green-200">

@@ -29,7 +29,7 @@
                 <p class="text-sm text-gray-900 max-w-xs truncate">{{ enrollment.package?.title }}</p>
                 <p class="text-xs text-gray-500">by {{ enrollment.package?.mentor?.name }}</p>
               </td>
-              <td class="px-6 py-4 text-sm font-bold text-indigo-600">${{ enrollment.amount_paid }}</td>
+              <td class="px-6 py-4 text-sm font-bold text-indigo-600">₹{{ enrollment.amount_paid }}</td>
               <td class="px-6 py-4">
                 <span
                   class="text-xs font-semibold px-2.5 py-1 rounded-full"

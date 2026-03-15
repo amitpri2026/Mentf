@@ -39,7 +39,7 @@
                   <span class="text-sm text-gray-500">({{ mentor.total_reviews }} reviews)</span>
                 </div>
                 <div class="text-sm text-gray-600">👥 {{ mentor.total_students }} students mentored</div>
-                <div class="text-xl font-bold text-gray-900">${{ mentor.hourly_rate }}<span class="text-sm font-normal text-gray-500">/hr</span></div>
+                <div class="text-xl font-bold text-gray-900">₹{{ mentor.hourly_rate }}<span class="text-sm font-normal text-gray-500">/hr</span></div>
               </div>
             </div>
           </div>
@@ -163,7 +163,7 @@
               >
                 <div class="flex justify-between items-start mb-2">
                   <h4 class="font-semibold text-sm text-gray-900 leading-snug flex-1 mr-2">{{ pkg.title }}</h4>
-                  <span class="text-indigo-600 font-bold text-sm whitespace-nowrap">${{ pkg.price }}</span>
+                  <span class="text-indigo-600 font-bold text-sm whitespace-nowrap">₹{{ pkg.price }}</span>
                 </div>
                 <div class="flex items-center gap-3 text-xs text-gray-500">
                   <span>{{ pkg.sessions }} session{{ pkg.sessions !== 1 ? 's' : '' }}</span>

@@ -60,7 +60,7 @@
                 <h4 class="font-semibold text-gray-900 text-sm truncate">{{ pkg.title }}</h4>
                 <p class="text-xs text-gray-500">{{ pkg.mentor?.name }} · {{ pkg.category?.name }}</p>
               </div>
-              <span class="text-indigo-600 font-bold text-sm flex-shrink-0">${{ pkg.price }}</span>
+              <span class="text-indigo-600 font-bold text-sm flex-shrink-0">₹{{ pkg.price }}</span>
             </Link>
           </div>
         </div>

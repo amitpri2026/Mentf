@@ -349,7 +349,7 @@ const step = ref(0);
 const form = reactive({
   title: '', description: '', requirements: '', outcomes: '',
   category_id: '', package_type_id: '',
-  price: '', currency: 'USD',
+  price: '', currency: 'INR',
   duration: 60, sessions: 1, max_students: 1,
   level: 'all', language: 'en',
 });

@@ -33,7 +33,7 @@
               </td>
               <td class="px-6 py-4 text-sm text-gray-600">{{ pkg.mentor?.name }}</td>
               <td class="px-6 py-4 text-sm text-gray-600">{{ pkg.category?.name }}</td>
-              <td class="px-6 py-4 text-sm font-bold text-indigo-600">${{ pkg.price }}</td>
+              <td class="px-6 py-4 text-sm font-bold text-indigo-600">₹{{ pkg.price }}</td>
               <td class="px-6 py-4">
                 <span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="pkg.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'">
                   {{ pkg.is_active ? 'Active' : 'Inactive' }}

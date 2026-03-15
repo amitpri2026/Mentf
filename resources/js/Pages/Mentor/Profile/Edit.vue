@@ -430,7 +430,7 @@ const summary = reactive({
   country:          props.mentor.country || '',
   timezone:         props.mentor.timezone || '',
   hourly_rate:      props.mentor.hourly_rate || '',
-  currency:         props.mentor.currency || 'USD',
+  currency:         props.mentor.currency || 'INR',
   years_experience: props.mentor.years_experience || '',
   linkedin:         props.mentor.linkedin || '',
   twitter:          props.mentor.twitter || '',

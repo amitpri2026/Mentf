@@ -60,7 +60,7 @@
               <p class="text-xs text-gray-500 truncate">{{ enrollment.package.title }}</p>
             </div>
             <div class="text-right flex-shrink-0">
-              <p class="text-sm font-bold text-indigo-600">${{ enrollment.amount_paid }}</p>
+              <p class="text-sm font-bold text-indigo-600">₹{{ enrollment.amount_paid }}</p>
               <p class="text-xs text-gray-400">{{ enrollment.created_at }}</p>
             </div>
           </div>
