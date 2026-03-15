@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Mentor;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CmsPagesController;
 use App\Http\Controllers\EnrollController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -14,6 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about',           [CmsPagesController::class, 'about'])->name('about');
+Route::get('/privacy',         [CmsPagesController::class, 'privacy'])->name('privacy');
+Route::get('/contact',         [CmsPagesController::class, 'contact'])->name('contact');
+Route::get('/blog',            [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}',     [BlogController::class, 'show'])->name('blog.show');
 Route::get('/mentors', [MentorController::class, 'index'])->name('mentors.index');
 Route::get('/mentors/{slug}', [MentorController::class, 'show'])->name('mentors.show');
 Route::get('/packages', [PackageController::class, 'index'])->name('packages.index');
@@ -107,6 +114,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/packages/{package}', [Admin\PackageController::class, 'destroy'])->name('packages.destroy');
 
     Route::get('/enrollments', [Admin\EnrollmentController::class, 'index'])->name('enrollments.index');
+    Route::get('/settings',    [Admin\SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/settings',   [Admin\SettingsController::class, 'update'])->name('settings.update');
+
+    Route::get('/cms',         [Admin\CmsController::class, 'index'])->name('cms.index');
+    Route::post('/cms',        [Admin\CmsController::class, 'update'])->name('cms.update');
+
+    Route::get('/blog',              [Admin\BlogController::class, 'index'])->name('blog.index');
+    Route::get('/blog/create',       [Admin\BlogController::class, 'create'])->name('blog.create');
+    Route::post('/blog',             [Admin\BlogController::class, 'store'])->name('blog.store');
+    Route::get('/blog/{post}/edit',  [Admin\BlogController::class, 'edit'])->name('blog.edit');
+    Route::put('/blog/{post}',       [Admin\BlogController::class, 'update'])->name('blog.update');
+    Route::delete('/blog/{post}',    [Admin\BlogController::class, 'destroy'])->name('blog.destroy');
 
     // Admin managing packages/topics on behalf of a specific mentor
     Route::prefix('mentors/{mentorId}')->name('mentors.')->group(function () {

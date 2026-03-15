@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Package;
+use App\Models\SiteSetting;
 use App\Models\User;
 use Inertia\Inertia;
 
@@ -107,12 +108,23 @@ class HomeController extends Controller
             ])->values()->toArray();
         }
 
+        $siteSettings = SiteSetting::allKeyed();
+        $liveMentors    = User::where('role', 'mentor')->where('is_active', true)->count();
+        $liveStudents   = User::where('role', 'mentee')->count();
+        $livePackages   = Package::where('is_active', true)->count();
+        $liveCategories = Category::where('is_active', true)->count();
+
         $stats = [
-            'mentors'    => User::where('role', 'mentor')->where('is_active', true)->count(),
-            'students'   => User::where('role', 'mentee')->count(),
-            'packages'   => Package::where('is_active', true)->count(),
-            'categories' => Category::where('is_active', true)->count(),
+            'mentors'    => $siteSettings['stat_mentors']    ?: $liveMentors,
+            'students'   => $siteSettings['stat_students']   ?: $liveStudents,
+            'packages'   => $siteSettings['stat_packages']   ?: $livePackages,
+            'categories' => $siteSettings['stat_categories'] ?: $liveCategories,
+            // raw live counts always available for hero profiles
+            'live_mentors'    => $liveMentors,
+            'live_categories' => $liveCategories,
         ];
+
+        $heroTagline = $siteSettings['hero_tagline'] ?: null;
 
         return Inertia::render('Home', [
             'featuredMentors'      => $featuredMentors,
@@ -120,6 +132,7 @@ class HomeController extends Controller
             'categories'           => $categories,
             'heroCategoryMentors'  => $heroCategoryMentors,
             'stats'                => $stats,
+            'heroTagline'          => $heroTagline,
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Category;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -37,6 +38,7 @@ class HandleInertiaRequests extends Middleware
                 ->orderBy('sort_order')
                 ->select('id', 'name', 'slug', 'icon', 'color')
                 ->get(),
+            'heroTagline' => fn () => SiteSetting::get('hero_tagline') ?: null,
         ];
     }
 }
