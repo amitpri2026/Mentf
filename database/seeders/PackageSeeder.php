@@ -31,7 +31,7 @@ class PackageSeeder extends Seeder
                 'sessions'      => 1,
                 'level'         => 'intermediate',
                 'is_featured'   => true,
-                'total_students' => 20,
+                'total_enrollments' => 20,
                 'avg_rating'    => 4.9,
                 'total_reviews' => 12,
                 'topics' => [
@@ -54,7 +54,7 @@ class PackageSeeder extends Seeder
                 'sessions'      => 1,
                 'level'         => 'beginner',
                 'is_featured'   => false,
-                'total_students' => 0,
+                'total_enrollments' => 0,
                 'avg_rating'    => 0,
                 'total_reviews' => 0,
                 'topics' => [
@@ -76,7 +76,7 @@ class PackageSeeder extends Seeder
                 'sessions'      => 1,
                 'level'         => 'intermediate',
                 'is_featured'   => false,
-                'total_students' => 0,
+                'total_enrollments' => 0,
                 'avg_rating'    => 0,
                 'total_reviews' => 0,
                 'topics' => [
@@ -98,7 +98,7 @@ class PackageSeeder extends Seeder
                 'sessions'      => 1,
                 'level'         => 'intermediate',
                 'is_featured'   => false,
-                'total_students' => 0,
+                'total_enrollments' => 0,
                 'avg_rating'    => 0,
                 'total_reviews' => 0,
                 'topics' => [
@@ -121,7 +121,7 @@ class PackageSeeder extends Seeder
                 'sessions'      => 10,
                 'level'         => 'beginner',
                 'is_featured'   => true,
-                'total_students' => 0,
+                'total_enrollments' => 0,
                 'avg_rating'    => 0,
                 'total_reviews' => 0,
                 'topics' => [
