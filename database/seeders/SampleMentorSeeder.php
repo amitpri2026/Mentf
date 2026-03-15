@@ -81,17 +81,33 @@ class SampleMentorSeeder extends Seeder
         ['Thiruvananthapuram', 'IN'], ['Vizag', 'IN'], ['Madurai', 'IN'], ['Patna', 'IN'],
     ];
 
-    private function randomName(\Faker\Generator $faker): array
+    private function pick(array $arr): mixed
     {
-        $isSouth  = $faker->boolean(40); // 40% south Indian, 60% north Indian
-        $isFemale = $faker->boolean(35);
+        return $arr[array_rand($arr)];
+    }
+
+    private function picks(array $arr, int $n): array
+    {
+        shuffle($arr);
+        return array_slice($arr, 0, min($n, count($arr)));
+    }
+
+    private function rand_bool(int $percent): bool
+    {
+        return rand(1, 100) <= $percent;
+    }
+
+    private function randomName(): array
+    {
+        $isSouth  = $this->rand_bool(40);
+        $isFemale = $this->rand_bool(35);
 
         if ($isSouth) {
-            $first   = $faker->randomElement($isFemale ? $this->southFemaleFirst : $this->southMaleFirst);
-            $last    = $faker->randomElement($this->southSurnames);
+            $first = $this->pick($isFemale ? $this->southFemaleFirst : $this->southMaleFirst);
+            $last  = $this->pick($this->southSurnames);
         } else {
-            $first   = $faker->randomElement($isFemale ? $this->northFemaleFirst : $this->northMaleFirst);
-            $last    = $faker->randomElement($this->northSurnames);
+            $first = $this->pick($isFemale ? $this->northFemaleFirst : $this->northMaleFirst);
+            $last  = $this->pick($this->northSurnames);
         }
 
         return [$first, $last];
@@ -99,7 +115,6 @@ class SampleMentorSeeder extends Seeder
 
     public function run(): void
     {
-        $faker    = \Faker\Factory::create('en_IN');
         $password = Hash::make('password');
 
         // ── Category profiles ─────────────────────────────────────────────────
@@ -378,25 +393,24 @@ class SampleMentorSeeder extends Seeder
             if (!$category) continue;
 
             for ($i = 0; $i < $profile['count']; $i++) {
-                [$firstName, $lastName] = $this->randomName($faker);
+                [$firstName, $lastName] = $this->randomName();
                 $name      = $firstName . ' ' . $lastName;
                 $emailIndex++;
                 $email     = strtolower($firstName) . '.' . strtolower($lastName) . $emailIndex . '@mentf.com';
-                $title     = $faker->randomElement($profile['titles']);
-                $company   = $faker->randomElement($profile['companies']);
-                // 70% Indian location, 30% from category-specific locations
-                $location  = $faker->boolean(70)
-                    ? $faker->randomElement($this->indianLocations)
-                    : $faker->randomElement($profile['locations']);
-                $rate      = $faker->randomElement($profile['rates']);
-                $exp       = $faker->numberBetween(3, 18);
-                $skills    = $faker->randomElements($profile['skills'], $faker->numberBetween(4, 7));
-                $rating    = round($faker->randomFloat(1, 3.8, 5.0), 1);
-                $reviews   = $faker->numberBetween(0, 180);
-                $students  = $faker->numberBetween(0, 400);
-                $featured  = $faker->boolean(15);
+                $title     = $this->pick($profile['titles']);
+                $company   = $this->pick($profile['companies']);
+                $location  = $this->rand_bool(70)
+                    ? $this->pick($this->indianLocations)
+                    : $this->pick($profile['locations']);
+                $rate      = $this->pick($profile['rates']);
+                $exp       = rand(3, 18);
+                $skills    = $this->picks($profile['skills'], rand(4, 7));
+                $rating    = round((rand(38, 50) / 10), 1);
+                $reviews   = rand(0, 180);
+                $students  = rand(0, 400);
+                $featured  = $this->rand_bool(15);
 
-                $bioTemplate = $faker->randomElement($profile['bio_templates']);
+                $bioTemplate = $this->pick($profile['bio_templates']);
                 $bio = str_replace(
                     ['{exp}', '{company}', '{skill1}', '{skill2}', '{skill3}'],
                     [$exp, $company, $skills[0], $skills[1] ?? $skills[0], $skills[2] ?? $skills[0]],
@@ -432,8 +446,8 @@ class SampleMentorSeeder extends Seeder
                 }
 
                 // ── Create 1–2 packages for this mentor ───────────────────────
-                $numPackages   = $faker->numberBetween(1, 2);
-                $packagePool   = $faker->randomElements($profile['packages'], min($numPackages, count($profile['packages'])));
+                $numPackages = rand(1, 2);
+                $packagePool = $this->picks($profile['packages'], $numPackages);
 
                 foreach ($packagePool as $pkgTemplate) {
                     $pkgType = $packageTypes->get($pkgTemplate['type']);
@@ -455,10 +469,10 @@ class SampleMentorSeeder extends Seeder
                         'level'             => $pkgTemplate['level'],
                         'language'          => 'en',
                         'is_active'         => true,
-                        'is_featured'       => $faker->boolean(10),
-                        'avg_rating'        => $reviews > 0 ? round($faker->randomFloat(1, 3.8, 5.0), 1) : 0,
-                        'total_reviews'     => $faker->numberBetween(0, min($reviews, 40)),
-                        'total_enrollments' => $faker->numberBetween(0, min($students, 80)),
+                        'is_featured'       => $this->rand_bool(10),
+                        'avg_rating'        => $reviews > 0 ? round((rand(38, 50) / 10), 1) : 0,
+                        'total_reviews'     => rand(0, min($reviews, 40)),
+                        'total_enrollments' => rand(0, min($students, 80)),
                     ]);
 
                     foreach ($pkgTemplate['topics'] as $idx => $topicTitle) {
