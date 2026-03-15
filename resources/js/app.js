@@ -6,10 +6,8 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from 'ziggy-js';
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'MentF';
-
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => `${title} - MentF`,
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.vue`,
