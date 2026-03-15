@@ -2,10 +2,18 @@
   <AppLayout>
     <Head :title="`Edit: ${package.title}`" />
 
+    <!-- Admin context banner -->
+    <div v-if="adminUser" class="bg-amber-50 border-b border-amber-200">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-4">
+        <span class="text-sm text-amber-700"><span class="font-semibold text-amber-600">Admin Mode</span> · Editing package for <strong>{{ adminUser.name }}</strong></span>
+        <Link :href="`/admin/mentors/${adminUser.id}/packages`" class="text-xs text-amber-700 border border-amber-300 rounded-lg px-3 py-1 hover:bg-amber-100 transition-colors">← All Packages</Link>
+      </div>
+    </div>
+
     <div class="bg-white border-b border-slate-200">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <nav class="flex items-center gap-2 text-sm text-slate-500 mb-1">
-          <Link href="/mentor/packages" class="hover:text-blue-600 transition-colors">My Packages</Link>
+          <Link :href="base.list" class="hover:text-blue-600 transition-colors">{{ adminUser ? `${adminUser.name}'s Packages` : 'My Packages' }}</Link>
           <span>/</span>
           <span class="text-slate-900 font-medium truncate">{{ package.title }}</span>
         </nav>
@@ -216,7 +224,7 @@
           </div>
 
           <div class="flex items-center justify-between">
-            <Link href="/mentor/packages" class="btn-secondary">← Back</Link>
+            <Link :href="base.list" class="btn-secondary">← Back</Link>
             <button type="submit" class="btn-primary px-8" :disabled="submitting">
               <svg v-if="submitting" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
@@ -340,7 +348,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
@@ -348,6 +356,18 @@ const props = defineProps({
   package: Object,
   categories: Array,
   packageTypes: Array,
+  adminUser: { type: Object, default: null },
+});
+
+const base = computed(() => {
+  const prefix = props.adminUser
+    ? `/admin/mentors/${props.adminUser.id}/packages`
+    : '/mentor/packages';
+  return {
+    list:    prefix,
+    pkg:     `${prefix}/${props.package.id}`,
+    topics:  `${prefix}/${props.package.id}/topics`,
+  };
 });
 
 const tabs = [
@@ -405,7 +425,7 @@ function submit() {
   if (thumbnailFile.value) data.append('thumbnail', thumbnailFile.value);
   if (bannerFile.value) data.append('banner', bannerFile.value);
 
-  router.post(`/mentor/packages/${props.package.id}`, data, {
+  router.post(base.value.pkg, data, {
     onError: (e) => { errors.value = e; },
     onFinish: () => { submitting.value = false; },
   });
@@ -422,7 +442,7 @@ const editTopicForm = reactive({ title: '', description: '', session_number: '',
 function addTopic() {
   if (!topicForm.title.trim()) return;
   addingTopic.value = true;
-  router.post(`/mentor/packages/${props.package.id}/topics`, { ...topicForm }, {
+  router.post(base.value.topics, { ...topicForm }, {
     onSuccess: () => {
       Object.keys(topicForm).forEach(k => topicForm[k] = '');
     },
@@ -440,7 +460,7 @@ function startEditTopic(topic) {
 }
 
 function saveTopicEdit(topic) {
-  router.put(`/mentor/packages/${props.package.id}/topics/${topic.id}`, { ...editTopicForm }, {
+  router.put(`${base.value.topics}/${topic.id}`, { ...editTopicForm }, {
     onSuccess: () => { editingTopicId.value = null; },
     preserveScroll: true,
   });
@@ -448,6 +468,6 @@ function saveTopicEdit(topic) {
 
 function deleteTopic(topic) {
   if (!confirm(`Delete topic "${topic.title}"?`)) return;
-  router.delete(`/mentor/packages/${props.package.id}/topics/${topic.id}`, { preserveScroll: true });
+  router.delete(`${base.value.topics}/${topic.id}`, { preserveScroll: true });
 }
 </script>

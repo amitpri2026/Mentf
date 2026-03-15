@@ -2,10 +2,18 @@
   <AppLayout>
     <Head title="Create Package" />
 
+    <!-- Admin context banner -->
+    <div v-if="adminUser" class="bg-amber-50 border-b border-amber-200">
+      <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-4">
+        <span class="text-sm text-amber-700"><span class="font-semibold text-amber-600">Admin Mode</span> · Creating package for <strong>{{ adminUser.name }}</strong></span>
+        <Link :href="`/admin/mentors/${adminUser.id}/packages`" class="text-xs text-amber-700 border border-amber-300 rounded-lg px-3 py-1 hover:bg-amber-100 transition-colors">← Packages</Link>
+      </div>
+    </div>
+
     <div class="bg-white border-b border-slate-200">
       <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <nav class="flex items-center gap-2 text-sm text-slate-500 mb-1">
-          <Link href="/mentor/packages" class="hover:text-blue-600 transition-colors">My Packages</Link>
+          <Link :href="base" class="hover:text-blue-600 transition-colors">{{ adminUser ? `${adminUser.name}'s Packages` : 'My Packages' }}</Link>
           <span>/</span>
           <span class="text-slate-900 font-medium">New Package</span>
         </nav>
@@ -295,7 +303,7 @@
           </svg>
           Back
         </button>
-        <Link v-else href="/mentor/packages" class="btn-secondary">Cancel</Link>
+        <Link v-else :href="base" class="btn-secondary">Cancel</Link>
 
         <div class="flex items-center gap-3">
           <!-- Step dots -->
@@ -328,7 +336,15 @@ import { ref, reactive, computed } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
-const props = defineProps({ categories: Array, packageTypes: Array });
+const props = defineProps({
+  categories: Array,
+  packageTypes: Array,
+  adminUser: { type: Object, default: null },
+});
+
+const base = computed(() =>
+  props.adminUser ? `/admin/mentors/${props.adminUser.id}/packages` : '/mentor/packages'
+);
 
 const steps = [
   { id: 'basics',  label: 'Basics' },
@@ -412,7 +428,7 @@ function submit() {
   if (thumbnailFile.value) data.append('thumbnail', thumbnailFile.value);
   if (bannerFile.value) data.append('banner', bannerFile.value);
 
-  router.post('/mentor/packages', data, {
+  router.post(base.value, data, {
     onError: (e) => { errors.value = e; submitting.value = false; },
     onFinish: () => { submitting.value = false; },
   });

@@ -78,6 +78,10 @@
                     :class="user.is_featured ? 'text-amber-700 bg-amber-50 hover:bg-amber-100' : 'text-slate-500 hover:text-amber-700 hover:bg-amber-50'">
                     {{ user.is_featured ? '★ Featured' : '☆ Feature' }}
                   </button>
+                  <Link v-if="user.role === 'mentor'" :href="`/admin/mentors/${user.id}/packages`"
+                    class="text-xs text-emerald-600 hover:text-emerald-800 font-medium px-3 py-1.5 rounded-lg hover:bg-emerald-50 transition-colors">
+                    Packages
+                  </Link>
                   <Link :href="`/admin/users/${user.id}/edit`" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors">Edit</Link>
                   <button @click="deleteUser(user)" class="text-xs text-red-600 hover:text-red-800 font-medium px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors">Delete</button>
                 </div>

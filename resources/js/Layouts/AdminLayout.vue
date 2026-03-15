@@ -4,13 +4,15 @@
     <aside class="w-64 bg-white border-r border-slate-200 fixed inset-y-0 left-0 z-50 flex flex-col">
       <!-- Logo -->
       <div class="h-16 flex items-center gap-3 px-5 border-b border-slate-200">
-        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
-          <span class="text-white font-bold text-sm">M</span>
-        </div>
-        <div>
-          <span class="text-base font-bold text-slate-900 tracking-tight">MentF</span>
-          <span class="block text-xs text-slate-400 leading-none">Admin Portal</span>
-        </div>
+        <Link href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
+            <span class="text-white font-bold text-sm">M</span>
+          </div>
+          <div>
+            <span class="text-base font-bold text-slate-900 tracking-tight">MentF</span>
+            <span class="block text-xs text-slate-400 leading-none">Admin Portal</span>
+          </div>
+        </Link>
       </div>
 
       <!-- Navigation -->
@@ -119,6 +121,7 @@ const pageTitle = computed(() => {
   if (path.startsWith('/admin/categories'))  return 'Categories';
   if (path.startsWith('/admin/packages'))    return 'Packages';
   if (path.startsWith('/admin/enrollments')) return 'Enrollments';
+  if (path.includes('/packages'))            return 'Mentor Packages';
   return 'Admin Panel';
 });
 

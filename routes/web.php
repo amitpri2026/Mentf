@@ -107,4 +107,19 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/packages/{package}', [Admin\PackageController::class, 'destroy'])->name('packages.destroy');
 
     Route::get('/enrollments', [Admin\EnrollmentController::class, 'index'])->name('enrollments.index');
+
+    // Admin managing packages/topics on behalf of a specific mentor
+    Route::prefix('mentors/{mentorId}')->name('mentors.')->group(function () {
+        Route::get('/packages',                                          [Admin\MentorPackageController::class, 'index'])  ->name('packages.index');
+        Route::get('/packages/create',                                   [Admin\MentorPackageController::class, 'create']) ->name('packages.create');
+        Route::post('/packages',                                         [Admin\MentorPackageController::class, 'store'])  ->name('packages.store');
+        Route::get('/packages/{package}/edit',                           [Admin\MentorPackageController::class, 'edit'])   ->name('packages.edit');
+        Route::post('/packages/{package}',                               [Admin\MentorPackageController::class, 'update']) ->name('packages.update');
+        Route::delete('/packages/{package}',                             [Admin\MentorPackageController::class, 'destroy'])->name('packages.destroy');
+
+        Route::post('/packages/{package}/topics',                        [Admin\MentorTopicController::class, 'store'])   ->name('topics.store');
+        Route::put('/packages/{package}/topics/{topic}',                 [Admin\MentorTopicController::class, 'update'])  ->name('topics.update');
+        Route::delete('/packages/{package}/topics/{topic}',              [Admin\MentorTopicController::class, 'destroy']) ->name('topics.destroy');
+        Route::post('/packages/{package}/topics/reorder',                [Admin\MentorTopicController::class, 'reorder']) ->name('topics.reorder');
+    });
 });

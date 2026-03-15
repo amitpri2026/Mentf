@@ -2,13 +2,27 @@
   <AppLayout>
     <Head title="My Packages" />
 
+    <!-- Admin context banner -->
+    <div v-if="adminUser" class="bg-amber-50 border-b border-amber-200">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-2 text-sm">
+          <span class="text-amber-600 font-semibold">Admin Mode</span>
+          <span class="text-amber-500">·</span>
+          <span class="text-amber-700">Managing packages for <strong>{{ adminUser.name }}</strong> ({{ adminUser.email }})</span>
+        </div>
+        <Link href="/admin/users" class="text-xs text-amber-700 hover:text-amber-900 font-medium border border-amber-300 rounded-lg px-3 py-1 hover:bg-amber-100 transition-colors">
+          ← Back to Users
+        </Link>
+      </div>
+    </div>
+
     <div class="bg-white border-b border-slate-200">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between">
         <div>
-          <h1 class="text-xl font-bold text-slate-900">My Packages</h1>
-          <p class="text-sm text-slate-500 mt-0.5">Manage your mentorship offerings</p>
+          <h1 class="text-xl font-bold text-slate-900">{{ adminUser ? `${adminUser.name}'s Packages` : 'My Packages' }}</h1>
+          <p class="text-sm text-slate-500 mt-0.5">Manage mentorship offerings</p>
         </div>
-        <Link href="/mentor/packages/create" class="btn-primary">
+        <Link :href="base + '/create'" class="btn-primary">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
           </svg>
@@ -22,8 +36,8 @@
       <div v-if="packages.length === 0" class="text-center py-20 bg-white rounded-xl border border-slate-200">
         <div class="text-5xl mb-4">📦</div>
         <h3 class="text-lg font-semibold text-slate-900 mb-2">No packages yet</h3>
-        <p class="text-slate-500 text-sm mb-6">Create your first mentorship package to start earning</p>
-        <Link href="/mentor/packages/create" class="btn-primary">Create First Package</Link>
+        <p class="text-slate-500 text-sm mb-6">Create the first mentorship package</p>
+        <Link :href="base + '/create'" class="btn-primary">Create First Package</Link>
       </div>
 
       <!-- Package list -->
@@ -65,7 +79,7 @@
             </div>
 
             <div class="flex items-center gap-2 flex-shrink-0">
-              <Link :href="`/mentor/packages/${pkg.id}/edit`"
+              <Link :href="`${base}/${pkg.id}/edit`"
                 class="px-3 py-1.5 text-sm font-medium text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
                 Edit
               </Link>
@@ -105,16 +119,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
-defineProps({ packages: Array });
+const props = defineProps({
+  packages: Array,
+  adminUser: { type: Object, default: null },
+});
+
+const base = computed(() =>
+  props.adminUser ? `/admin/mentors/${props.adminUser.id}/packages` : '/mentor/packages'
+);
 
 const deleteTarget = ref(null);
 function confirmDelete(pkg) { deleteTarget.value = pkg; }
 function doDelete() {
-  router.delete(`/mentor/packages/${deleteTarget.value.id}`, {
+  router.delete(`${base.value}/${deleteTarget.value.id}`, {
     onFinish: () => { deleteTarget.value = null; }
   });
 }
