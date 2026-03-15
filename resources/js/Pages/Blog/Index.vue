@@ -12,22 +12,30 @@
       <!-- Posts grid -->
       <div v-if="posts.length" class="grid sm:grid-cols-2 gap-6">
         <Link v-for="post in posts" :key="post.id" :href="`/blog/${post.slug}`"
-          class="bg-white rounded-2xl border border-gray-100 p-6 hover:border-blue-200 hover:shadow-md transition-all group">
-          <div class="flex flex-col h-full">
-            <p class="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-3">
-              {{ formatDate(post.published_at) }}
-            </p>
-            <h2 class="text-base font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors leading-snug">
-              {{ post.title }}
-            </h2>
-            <p v-if="post.excerpt" class="text-sm text-gray-500 leading-relaxed flex-1">
-              {{ post.excerpt }}
-            </p>
-            <div class="mt-4 flex items-center gap-1 text-blue-600 text-sm font-medium">
+          class="bg-white rounded-2xl border border-gray-100 p-6 hover:border-blue-200 hover:shadow-md transition-all group flex flex-col">
+          <p class="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-3">
+            {{ formatDate(post.published_at) }}
+          </p>
+          <h2 class="text-base font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors leading-snug flex-1">
+            {{ post.title }}
+          </h2>
+          <p v-if="post.excerpt" class="text-sm text-gray-500 leading-relaxed mb-4">
+            {{ post.excerpt }}
+          </p>
+          <div class="flex items-center justify-between mt-auto">
+            <div class="flex items-center gap-1 text-blue-600 text-sm font-medium">
               Read more
               <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
+            </div>
+            <!-- Comment count -->
+            <div v-if="post.comments_count > 0" class="flex items-center gap-1 text-xs text-gray-400">
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              {{ post.comments_count }}
             </div>
           </div>
         </Link>

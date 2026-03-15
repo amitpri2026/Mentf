@@ -10,6 +10,7 @@ class BlogController extends Controller
     public function index()
     {
         $posts = BlogPost::published()
+            ->withCount(['comments'])
             ->orderByDesc('published_at')
             ->get(['id', 'title', 'slug', 'excerpt', 'published_at']);
 
@@ -22,8 +23,14 @@ class BlogController extends Controller
     {
         $post = BlogPost::published()->where('slug', $slug)->firstOrFail();
 
+        $comments = $post->comments()
+            ->select('id', 'author_name', 'content', 'created_at', 'user_id')
+            ->get();
+
         return Inertia::render('Blog/Show', [
-            'post' => $post,
+            'post'            => $post,
+            'comments'        => $comments,
+            'comment_success' => session('comment_success'),
         ]);
     }
 }

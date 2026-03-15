@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Mentor;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\BlogCommentController;
 use App\Http\Controllers\CmsPagesController;
 use App\Http\Controllers\EnrollController;
 use App\Http\Controllers\CategoryController;
@@ -19,8 +20,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about',           [CmsPagesController::class, 'about'])->name('about');
 Route::get('/privacy',         [CmsPagesController::class, 'privacy'])->name('privacy');
 Route::get('/contact',         [CmsPagesController::class, 'contact'])->name('contact');
-Route::get('/blog',            [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/{slug}',     [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog',                  [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}',           [BlogController::class, 'show'])->name('blog.show');
+Route::post('/blog/{slug}/comments', [BlogCommentController::class, 'store'])->name('blog.comments.store');
 Route::get('/mentors', [MentorController::class, 'index'])->name('mentors.index');
 Route::get('/mentors/{slug}', [MentorController::class, 'show'])->name('mentors.show');
 Route::get('/packages', [PackageController::class, 'index'])->name('packages.index');
@@ -126,6 +128,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/blog/{post}/edit',  [Admin\BlogController::class, 'edit'])->name('blog.edit');
     Route::put('/blog/{post}',       [Admin\BlogController::class, 'update'])->name('blog.update');
     Route::delete('/blog/{post}',    [Admin\BlogController::class, 'destroy'])->name('blog.destroy');
+    Route::delete('/blog-comments/{comment}', [Admin\BlogCommentController::class, 'destroy'])->name('blog.comments.destroy');
 
     // Admin managing packages/topics on behalf of a specific mentor
     Route::prefix('mentors/{mentorId}')->name('mentors.')->group(function () {

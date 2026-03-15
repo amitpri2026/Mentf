@@ -12,7 +12,7 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $posts = BlogPost::orderByDesc('created_at')->get();
+        $posts = BlogPost::withCount('comments')->orderByDesc('created_at')->get();
 
         return Inertia::render('Admin/Blog/Index', [
             'posts' => $posts,
@@ -50,8 +50,14 @@ class BlogController extends Controller
 
     public function edit(BlogPost $post)
     {
+        $comments = $post->comments()
+            ->select('id', 'author_name', 'author_email', 'content', 'created_at')
+            ->orderByDesc('created_at')
+            ->get();
+
         return Inertia::render('Admin/Blog/Edit', [
-            'post' => $post,
+            'post'     => $post,
+            'comments' => $comments,
         ]);
     }
 

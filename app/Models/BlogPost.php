@@ -22,4 +22,9 @@ class BlogPost extends Model
                      ->whereNotNull('published_at')
                      ->where('published_at', '<=', now());
     }
+
+    public function comments()
+    {
+        return $this->hasMany(BlogComment::class)->where('is_approved', true)->orderBy('created_at');
+    }
 }
