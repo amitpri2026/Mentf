@@ -14,9 +14,92 @@ use Illuminate\Support\Str;
 
 class SampleMentorSeeder extends Seeder
 {
+    // ── Indian name pools ──────────────────────────────────────────────────────
+
+    private array $northMaleFirst = [
+        'Rahul', 'Amit', 'Vikram', 'Suresh', 'Rajesh', 'Anil', 'Sanjay', 'Deepak', 'Vikas', 'Mohit',
+        'Rohit', 'Kunal', 'Nitin', 'Gaurav', 'Manish', 'Vivek', 'Ravi', 'Ajay', 'Aman', 'Arjun',
+        'Akash', 'Ankit', 'Harsh', 'Karan', 'Naveen', 'Piyush', 'Shivam', 'Tushar', 'Varun', 'Yash',
+        'Abhishek', 'Alok', 'Devendra', 'Girish', 'Hemant', 'Ishaan', 'Kamal', 'Lalit', 'Manoj',
+        'Neeraj', 'Prashant', 'Ramesh', 'Sandeep', 'Tarun', 'Umesh', 'Ashish', 'Bhavesh', 'Dinesh',
+        'Hitesh', 'Jitesh', 'Mukesh', 'Naresh', 'Pankaj', 'Rakesh', 'Sachin', 'Yogesh', 'Aakash',
+    ];
+
+    private array $northFemaleFirst = [
+        'Priya', 'Pooja', 'Neha', 'Anita', 'Sunita', 'Kavita', 'Rekha', 'Sonal', 'Meera', 'Nisha',
+        'Divya', 'Anjali', 'Aarti', 'Seema', 'Geeta', 'Ritu', 'Sonia', 'Manju', 'Sapna', 'Poonam',
+        'Shweta', 'Richa', 'Shreya', 'Swati', 'Tanvi', 'Usha', 'Vandana', 'Garima', 'Himani',
+        'Jyoti', 'Monika', 'Nidhi', 'Pallavi', 'Rashmi', 'Shilpa', 'Tanya', 'Varsha', 'Yukta',
+        'Archana', 'Bharti', 'Chanchal', 'Deepika', 'Ekta', 'Falguni', 'Harpreet', 'Indira',
+        'Kamla', 'Lata', 'Mamta', 'Namrata', 'Preeti', 'Radha', 'Savita', 'Uma', 'Vineeta',
+    ];
+
+    private array $northSurnames = [
+        'Sharma', 'Gupta', 'Singh', 'Verma', 'Mishra', 'Srivastava', 'Tiwari', 'Pandey', 'Chauhan',
+        'Yadav', 'Patel', 'Agarwal', 'Jain', 'Saxena', 'Sinha', 'Tripathi', 'Dubey', 'Chaudhary',
+        'Mehta', 'Kapoor', 'Khanna', 'Malhotra', 'Bhatia', 'Arora', 'Chopra', 'Sethi', 'Tandon',
+        'Nanda', 'Bajaj', 'Rastogi', 'Dixit', 'Shukla', 'Awasthi', 'Bhatt', 'Joshi', 'Kulkarni',
+        'Patil', 'Desai', 'Shah', 'Gandhi', 'Trivedi', 'Solanki', 'Rajput', 'Thakur', 'Rana',
+    ];
+
+    private array $southMaleFirst = [
+        'Arjun', 'Karthik', 'Vijay', 'Murugan', 'Siva', 'Ganesh', 'Selvam', 'Bala', 'Chandru',
+        'Gokul', 'Hari', 'Kannan', 'Logesh', 'Mani', 'Nathan', 'Pandian', 'Raja', 'Senthil',
+        'Udhaya', 'Vel', 'Arun', 'Basavaraj', 'Chandrashekhar', 'Eranna', 'Gururaj', 'Hanumantha',
+        'Jagadeesh', 'Lokesh', 'Mahesh', 'Nagaraj', 'Prakash', 'Ramaiah', 'Shankar', 'Thimmaiah',
+        'Veeranna', 'Srinivas', 'Prasad', 'Bhaskar', 'Gopal', 'Harish', 'Kiran', 'Madhu',
+        'Nagesh', 'Praveen', 'Ramana', 'Sudhir', 'Vamsi', 'Venkat', 'Raju', 'Biju', 'Manu',
+        'Nibin', 'Rajeev', 'Sunil', 'Dileep', 'Sreejith', 'Anoop', 'Sujith', 'Vishnu', 'Aravind',
+    ];
+
+    private array $southFemaleFirst = [
+        'Kavitha', 'Lakshmi', 'Meena', 'Nithya', 'Pavithra', 'Radhika', 'Saranya', 'Thenmozhi',
+        'Vasantha', 'Abirami', 'Bhuvana', 'Chithra', 'Dhanya', 'Gayathri', 'Hema', 'Indhu',
+        'Jayanthi', 'Kamala', 'Lavanya', 'Malathi', 'Nandhini', 'Parvathi', 'Ranjani', 'Shanthi',
+        'Anuradha', 'Bhavani', 'Chandana', 'Eesha', 'Haritha', 'Jyothi', 'Latha', 'Madhuri',
+        'Padmavathi', 'Sowmya', 'Veda', 'Yamini', 'Deepa', 'Oviya', 'Uma', 'Sudha', 'Revathi',
+        'Preethi', 'Nandini', 'Manju', 'Keerthi', 'Jisha', 'Divya', 'Bindu', 'Anu', 'Smitha',
+        'Sindhu', 'Rekha', 'Poornima', 'Nirmala', 'Meenakshi', 'Lalitha', 'Indu', 'Geetha',
+    ];
+
+    private array $southSurnames = [
+        'Murugesan', 'Krishnamurthy', 'Subramaniam', 'Ramamurthy', 'Venkatesan', 'Sundaram',
+        'Natarajan', 'Ramasamy', 'Arunachalam', 'Balakrishnan', 'Chandrasekaran', 'Ganesan',
+        'Hariharan', 'Karthikeyan', 'Lakshmanan', 'Manikandan', 'Narayanan', 'Rajendran',
+        'Selvakumar', 'Reddy', 'Naidu', 'Rao', 'Varma', 'Chowdary', 'Nair', 'Menon', 'Pillai',
+        'Kurup', 'Namboothiri', 'Gowda', 'Hegde', 'Shetty', 'Bhat', 'Patil', 'Iyer', 'Iyengar',
+        'Venkataraman', 'Subramanian', 'Ramakrishnan', 'Govindasamy', 'Shanmugam', 'Elumalai',
+        'Dhandapani', 'Annamalai', 'Arumugam', 'Palaniswamy', 'Ravi', 'Kumar', 'Pillai', 'Nambiar',
+    ];
+
+    private array $indianLocations = [
+        ['Bangalore', 'IN'], ['Mumbai', 'IN'], ['Delhi', 'IN'], ['Hyderabad', 'IN'],
+        ['Chennai', 'IN'], ['Pune', 'IN'], ['Kolkata', 'IN'], ['Ahmedabad', 'IN'],
+        ['Noida', 'IN'], ['Gurgaon', 'IN'], ['Kochi', 'IN'], ['Coimbatore', 'IN'],
+        ['Jaipur', 'IN'], ['Chandigarh', 'IN'], ['Lucknow', 'IN'], ['Indore', 'IN'],
+        ['Bhopal', 'IN'], ['Nagpur', 'IN'], ['Surat', 'IN'], ['Mysore', 'IN'],
+        ['Thiruvananthapuram', 'IN'], ['Vizag', 'IN'], ['Madurai', 'IN'], ['Patna', 'IN'],
+    ];
+
+    private function randomName(\Faker\Generator $faker): array
+    {
+        $isSouth  = $faker->boolean(40); // 40% south Indian, 60% north Indian
+        $isFemale = $faker->boolean(35);
+
+        if ($isSouth) {
+            $first   = $faker->randomElement($isFemale ? $this->southFemaleFirst : $this->southMaleFirst);
+            $last    = $faker->randomElement($this->southSurnames);
+        } else {
+            $first   = $faker->randomElement($isFemale ? $this->northFemaleFirst : $this->northMaleFirst);
+            $last    = $faker->randomElement($this->northSurnames);
+        }
+
+        return [$first, $last];
+    }
+
     public function run(): void
     {
-        $faker    = \Faker\Factory::create();
+        $faker    = \Faker\Factory::create('en_IN');
         $password = Hash::make('password');
 
         // ── Category profiles ─────────────────────────────────────────────────
@@ -295,14 +378,16 @@ class SampleMentorSeeder extends Seeder
             if (!$category) continue;
 
             for ($i = 0; $i < $profile['count']; $i++) {
-                $firstName = $faker->firstName();
-                $lastName  = $faker->lastName();
+                [$firstName, $lastName] = $this->randomName($faker);
                 $name      = $firstName . ' ' . $lastName;
                 $emailIndex++;
                 $email     = strtolower($firstName) . '.' . strtolower($lastName) . $emailIndex . '@mentf.com';
                 $title     = $faker->randomElement($profile['titles']);
                 $company   = $faker->randomElement($profile['companies']);
-                $location  = $faker->randomElement($profile['locations']);
+                // 70% Indian location, 30% from category-specific locations
+                $location  = $faker->boolean(70)
+                    ? $faker->randomElement($this->indianLocations)
+                    : $faker->randomElement($profile['locations']);
                 $rate      = $faker->randomElement($profile['rates']);
                 $exp       = $faker->numberBetween(3, 18);
                 $skills    = $faker->randomElements($profile['skills'], $faker->numberBetween(4, 7));
