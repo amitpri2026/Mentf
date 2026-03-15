@@ -79,6 +79,12 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
     }
 
+    public function patch(Request $request, User $user)
+    {
+        $user->update($request->only(['is_active', 'is_featured']));
+        return back()->with('success', 'User updated.');
+    }
+
     public function destroy(User $user)
     {
         $user->delete();

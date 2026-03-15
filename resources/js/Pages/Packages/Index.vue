@@ -83,16 +83,32 @@
           </div>
 
           <!-- Pagination -->
-          <div v-if="packages.last_page > 1" class="mt-8 flex items-center justify-center gap-2">
-            <button
-              v-for="page in packages.last_page"
-              :key="page"
-              @click="goToPage(page)"
-              class="w-10 h-10 rounded-lg text-sm font-medium transition-colors"
-              :class="page === packages.current_page ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'"
-            >
-              {{ page }}
-            </button>
+          <div v-if="packages.last_page > 1" class="mt-8 flex items-center justify-between">
+            <p class="text-sm text-gray-500">
+              Page <span class="font-semibold text-gray-900">{{ packages.current_page }}</span> of <span class="font-semibold text-gray-900">{{ packages.last_page }}</span>
+            </p>
+            <div class="flex gap-2">
+              <button
+                @click="goToPage(packages.current_page - 1)"
+                :disabled="packages.current_page === 1"
+                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg border transition-colors"
+                :class="packages.current_page === 1
+                  ? 'border-gray-200 text-gray-300 cursor-not-allowed bg-white'
+                  : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'"
+              >
+                ← Prev
+              </button>
+              <button
+                @click="goToPage(packages.current_page + 1)"
+                :disabled="packages.current_page === packages.last_page"
+                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg border transition-colors"
+                :class="packages.current_page === packages.last_page
+                  ? 'border-gray-200 text-gray-300 cursor-not-allowed bg-white'
+                  : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'"
+              >
+                Next →
+              </button>
+            </div>
           </div>
         </div>
       </div>

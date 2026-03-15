@@ -87,18 +87,32 @@
             </div>
 
             <!-- Pagination -->
-            <div v-if="mentors.last_page > 1" class="mt-8 flex items-center justify-center gap-1.5">
-              <button
-                v-for="page in mentors.last_page"
-                :key="page"
-                @click="goToPage(page)"
-                class="w-9 h-9 rounded-lg text-sm font-medium transition-colors"
-                :class="page === mentors.current_page
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'"
-              >
-                {{ page }}
-              </button>
+            <div v-if="mentors.last_page > 1" class="mt-8 flex items-center justify-between">
+              <p class="text-sm text-slate-500">
+                Page <span class="font-semibold text-slate-900">{{ mentors.current_page }}</span> of <span class="font-semibold text-slate-900">{{ mentors.last_page }}</span>
+              </p>
+              <div class="flex gap-2">
+                <button
+                  @click="goToPage(mentors.current_page - 1)"
+                  :disabled="mentors.current_page === 1"
+                  class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg border transition-colors"
+                  :class="mentors.current_page === 1
+                    ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-white'
+                    : 'border-slate-200 text-slate-700 bg-white hover:bg-slate-50'"
+                >
+                  ← Prev
+                </button>
+                <button
+                  @click="goToPage(mentors.current_page + 1)"
+                  :disabled="mentors.current_page === mentors.last_page"
+                  class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg border transition-colors"
+                  :class="mentors.current_page === mentors.last_page
+                    ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-white'
+                    : 'border-slate-200 text-slate-700 bg-white hover:bg-slate-50'"
+                >
+                  Next →
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Package;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
-    public function show($slug)
+    public function show(Request $request, $slug)
     {
         $category = Category::where('slug', $slug)->where('is_active', true)->firstOrFail();
 
@@ -18,17 +19,18 @@ class CategoryController extends Controller
             ->whereHas('categories', fn($q) => $q->where('categories.id', $category->id))
             ->with(['skills'])
             ->orderByDesc('avg_rating')
-            ->limit(8)
-            ->get()
-            ->map(fn ($m) => [
+            ->paginate(12, ['*'], 'mentor_page')
+            ->through(fn ($m) => [
                 'id' => $m->id,
                 'name' => $m->name,
                 'slug' => $m->slug,
                 'title' => $m->title,
+                'location' => $m->location,
                 'profile_photo_url' => $m->profile_photo_url,
                 'avg_rating' => $m->avg_rating,
                 'total_reviews' => $m->total_reviews,
                 'hourly_rate' => $m->hourly_rate,
+                'is_featured' => $m->is_featured,
                 'skills' => $m->skills->take(3)->pluck('name'),
             ]);
 
@@ -36,17 +38,27 @@ class CategoryController extends Controller
             ->where('is_active', true)
             ->with(['mentor', 'packageType'])
             ->orderByDesc('total_enrollments')
-            ->limit(8)
-            ->get()
-            ->map(fn ($p) => [
+            ->paginate(12, ['*'], 'package_page')
+            ->through(fn ($p) => [
                 'id' => $p->id,
                 'title' => $p->title,
                 'slug' => $p->slug,
                 'price' => $p->price,
                 'currency' => $p->currency,
+                'duration' => $p->duration,
+                'sessions' => $p->sessions,
+                'level' => $p->level,
                 'avg_rating' => $p->avg_rating,
                 'total_reviews' => $p->total_reviews,
-                'mentor' => ['name' => $p->mentor->name, 'slug' => $p->mentor->slug],
+                'total_enrollments' => $p->total_enrollments,
+                'thumbnail_url' => $p->thumbnail_url,
+                'is_featured' => $p->is_featured,
+                'mentor' => [
+                    'name' => $p->mentor->name,
+                    'slug' => $p->mentor->slug,
+                    'profile_photo_url' => $p->mentor->profile_photo_url,
+                    'title' => $p->mentor->title,
+                ],
                 'package_type' => ['name' => $p->packageType->name],
             ]);
 

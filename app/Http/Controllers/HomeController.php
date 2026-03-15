@@ -11,12 +11,13 @@ class HomeController extends Controller
 {
     public function index()
     {
+        // Featured mentors — admin-selected, randomised each load
         $featuredMentors = User::where('role', 'mentor')
             ->where('is_active', true)
             ->where('is_featured', true)
             ->with(['categories', 'skills'])
             ->withCount('packages')
-            ->orderByDesc('avg_rating')
+            ->inRandomOrder()
             ->limit(6)
             ->get()
             ->map(fn ($m) => [
@@ -34,13 +35,19 @@ class HomeController extends Controller
                 'currency' => $m->currency,
                 'years_experience' => $m->years_experience,
                 'packages_count' => $m->packages_count,
+                'is_featured' => $m->is_featured,
                 'categories' => $m->categories->map(fn ($c) => ['name' => $c->name, 'slug' => $c->slug]),
                 'skills' => $m->skills->take(4)->pluck('name'),
             ]);
 
-        $popularPackages = Package::where('is_active', true)
-            ->with(['mentor', 'category', 'packageType'])
-            ->orderByDesc('total_enrollments')
+        // Popular packages — admin-selected (is_featured), randomised; fallback to top enrollments
+        $popularQuery = Package::where('is_active', true)
+            ->with(['mentor', 'category', 'packageType']);
+
+        $hasFeaturedPkgs = (clone $popularQuery)->where('is_featured', true)->exists();
+
+        $popularPackages = (clone $popularQuery)
+            ->when($hasFeaturedPkgs, fn($q) => $q->where('is_featured', true)->inRandomOrder(), fn($q) => $q->orderByDesc('total_enrollments'))
             ->limit(6)
             ->get()
             ->map(fn ($p) => [
@@ -56,6 +63,7 @@ class HomeController extends Controller
                 'avg_rating' => $p->avg_rating,
                 'total_reviews' => $p->total_reviews,
                 'total_enrollments' => $p->total_enrollments,
+                'is_featured' => $p->is_featured,
                 'thumbnail_url' => $p->thumbnail_url,
                 'mentor' => [
                     'name' => $p->mentor->name,
@@ -69,21 +77,49 @@ class HomeController extends Controller
 
         $categories = Category::where('is_active', true)
             ->orderBy('sort_order')
-            ->withCount(['packages' => fn($q) => $q->where('is_active', true)])
+            ->withCount([
+                'packages' => fn($q) => $q->where('is_active', true),
+                'mentors' => fn($q) => $q->where('role', 'mentor')->where('is_active', true),
+            ])
             ->get();
 
+        // Hero category mentor cards — up to 3 active mentors per category
+        $allMentors = User::where('role', 'mentor')
+            ->where('is_active', true)
+            ->with(['categories', 'skills'])
+            ->orderByDesc('avg_rating')
+            ->get();
+
+        $heroCategoryMentors = [];
+        foreach ($categories as $cat) {
+            $catMentors = $allMentors->filter(
+                fn($m) => $m->categories->contains('slug', $cat->slug)
+            )->take(3);
+
+            $heroCategoryMentors[$cat->slug] = $catMentors->map(fn($m) => [
+                'name'    => $m->name,
+                'initial' => mb_strtoupper(mb_substr($m->name, 0, 1)),
+                'title'   => $m->title ?? '',
+                'rating'  => number_format($m->avg_rating, 1),
+                'reviews' => $m->total_reviews,
+                'rate'    => (int) ($m->hourly_rate ?? 0),
+                'skills'  => $m->skills->take(4)->pluck('name')->toArray(),
+            ])->values()->toArray();
+        }
+
         $stats = [
-            'mentors' => User::where('role', 'mentor')->where('is_active', true)->count(),
-            'students' => User::where('role', 'mentee')->count(),
-            'packages' => Package::where('is_active', true)->count(),
+            'mentors'    => User::where('role', 'mentor')->where('is_active', true)->count(),
+            'students'   => User::where('role', 'mentee')->count(),
+            'packages'   => Package::where('is_active', true)->count(),
             'categories' => Category::where('is_active', true)->count(),
         ];
 
         return Inertia::render('Home', [
-            'featuredMentors' => $featuredMentors,
-            'popularPackages' => $popularPackages,
-            'categories' => $categories,
-            'stats' => $stats,
+            'featuredMentors'      => $featuredMentors,
+            'popularPackages'      => $popularPackages,
+            'categories'           => $categories,
+            'heroCategoryMentors'  => $heroCategoryMentors,
+            'stats'                => $stats,
         ]);
     }
 }

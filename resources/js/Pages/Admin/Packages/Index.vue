@@ -22,6 +22,7 @@
               <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
               <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Price</th>
               <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Featured</th>
               <th class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Actions</th>
             </tr>
           </thead>
@@ -38,6 +39,13 @@
                 <span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="pkg.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'">
                   {{ pkg.is_active ? 'Active' : 'Inactive' }}
                 </span>
+              </td>
+              <td class="px-6 py-4">
+                <button @click="toggleFeatured(pkg)"
+                  class="text-xs font-medium px-2.5 py-1 rounded-full transition-colors"
+                  :class="pkg.is_featured ? 'bg-amber-100 text-amber-700 hover:bg-amber-200' : 'bg-gray-100 text-gray-500 hover:bg-amber-50 hover:text-amber-700'">
+                  {{ pkg.is_featured ? '★ Popular' : '☆ Mark' }}
+                </button>
               </td>
               <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-2">
@@ -86,6 +94,10 @@ function goToPage(page) {
 
 function toggleActive(pkg) {
   router.put(`/admin/packages/${pkg.id}`, { is_active: !pkg.is_active }, { preserveState: true });
+}
+
+function toggleFeatured(pkg) {
+  router.put(`/admin/packages/${pkg.id}`, { is_featured: !pkg.is_featured }, { preserveState: true });
 }
 
 function deletePkg(pkg) {

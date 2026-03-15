@@ -46,7 +46,7 @@
                 @keyup.enter="doSearch"
                 type="text"
                 placeholder="Search mentors, skills, topics..."
-                class="flex-1 px-2 py-2 text-slate-900 bg-transparent focus:outline-none text-sm"
+                class="flex-1 px-2 py-2 text-slate-900 bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 text-sm"
               />
               <button @click="doSearch" class="btn-primary text-sm px-5 py-2 shrink-0">
                 Search
@@ -81,7 +81,7 @@
             </div>
           </div>
 
-          <!-- Right: Stacked mentor profiles (changes with category) -->
+          <!-- Right: Stacked mentor profiles (changes with category, from real data) -->
           <div class="relative hidden lg:block">
             <!-- Background blob -->
             <div class="absolute -inset-6 bg-gradient-to-br from-blue-50 via-white to-slate-50 rounded-3xl"></div>
@@ -118,7 +118,7 @@
                         <p class="font-semibold text-slate-900 text-sm">{{ pillCategories[currentCatIndex].profiles[1].name }}</p>
                         <p class="text-xs text-slate-500">{{ pillCategories[currentCatIndex].profiles[1].title }}</p>
                       </div>
-                      <span class="text-sm font-bold text-slate-700">₹{{ pillCategories[currentCatIndex].profiles[1].rate }}<span class="text-xs font-normal text-slate-400">/hr</span></span>
+                      <span v-if="pillCategories[currentCatIndex].profiles[1].rate" class="text-sm font-bold text-slate-700">₹{{ pillCategories[currentCatIndex].profiles[1].rate }}<span class="text-xs font-normal text-slate-400">/hr</span></span>
                     </div>
                   </div>
 
@@ -131,7 +131,7 @@
                         <span>{{ pillCategories[currentCatIndex].emoji }}</span>
                         {{ pillCategories[currentCatIndex].label }}
                       </span>
-                      <div class="flex items-center gap-1">
+                      <div v-if="pillCategories[currentCatIndex].profiles[0].reviews > 0" class="flex items-center gap-1">
                         <svg class="w-3.5 h-3.5 fill-amber-400 text-amber-400" viewBox="0 0 20 20">
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                         </svg>
@@ -148,20 +148,20 @@
                       <div>
                         <h3 class="font-bold text-slate-900 text-base">{{ pillCategories[currentCatIndex].profiles[0].name }}</h3>
                         <p class="text-sm font-medium" :style="{ color: pillCategories[currentCatIndex].badgeColor }">{{ pillCategories[currentCatIndex].profiles[0].title }}</p>
-                        <p class="text-xs text-slate-400 mt-0.5">{{ pillCategories[currentCatIndex].profiles[0].company }}</p>
                       </div>
                     </div>
                     <!-- Skills -->
-                    <div class="flex flex-wrap gap-1.5 mb-4">
+                    <div v-if="pillCategories[currentCatIndex].profiles[0].skills?.length" class="flex flex-wrap gap-1.5 mb-4">
                       <span v-for="skill in pillCategories[currentCatIndex].profiles[0].skills" :key="skill"
                         class="text-xs bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-md font-medium">{{ skill }}</span>
                     </div>
                     <!-- Footer -->
                     <div class="flex items-center justify-between pt-3 border-t border-slate-100">
-                      <div>
+                      <div v-if="pillCategories[currentCatIndex].profiles[0].rate">
                         <span class="text-lg font-bold text-slate-900">₹{{ pillCategories[currentCatIndex].profiles[0].rate }}</span>
                         <span class="text-sm text-slate-400">/hr</span>
                       </div>
+                      <div v-else></div>
                       <Link href="/mentors" class="btn-primary text-xs px-4 py-2">View Profile</Link>
                     </div>
                   </div>
@@ -207,7 +207,7 @@
       </div>
     </section>
 
-    <!-- Dual CTA boxes — moved here, right before categories -->
+    <!-- Dual CTA boxes -->
     <section class="bg-white py-14 border-b border-slate-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid md:grid-cols-2 gap-5">
@@ -253,7 +253,9 @@
             </div>
             <div>
               <span class="text-sm font-semibold text-slate-800 group-hover:text-blue-700 transition-colors leading-snug block">{{ cat.name }}</span>
-              <span class="text-xs text-slate-400 mt-0.5 block">View mentors →</span>
+              <span class="text-xs text-slate-400 mt-0.5 block">
+                {{ cat.mentors_count }} mentor{{ cat.mentors_count !== 1 ? 's' : '' }}
+              </span>
             </div>
           </Link>
         </div>
@@ -275,8 +277,11 @@
             </svg>
           </Link>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div v-if="featuredMentors.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <MentorCard v-for="mentor in featuredMentors" :key="mentor.id" :mentor="mentor" />
+        </div>
+        <div v-else class="text-center py-12 text-slate-400 text-sm">
+          No featured mentors yet. Admins can mark mentors as featured.
         </div>
       </div>
     </section>
@@ -296,8 +301,11 @@
             </svg>
           </Link>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div v-if="popularPackages.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <PackageCard v-for="pkg in popularPackages" :key="pkg.id" :package="pkg" />
+        </div>
+        <div v-else class="text-center py-12 text-slate-400 text-sm">
+          No featured packages yet. Admins can mark packages as popular.
         </div>
       </div>
     </section>
@@ -355,119 +363,59 @@ const props = defineProps({
   featuredMentors: Array,
   popularPackages: Array,
   categories: Array,
+  heroCategoryMentors: Object,
   stats: Object,
 });
 
 const searchQuery = ref('');
 
-// Animated pill + stacked profile cards per category
-const pillCategories = [
-  {
-    emoji: '🤖', label: 'Artificial Intelligence',
-    gradient: 'linear-gradient(135deg,#3b82f6,#1d4ed8)',
-    badgeBg: '#dbeafe', badgeColor: '#1e40af',
-    profiles: [
-      { initial:'S', name:'Sarah Johnson',  title:'ML Engineer & AI Researcher',    company:'ex-Google DeepMind', rating:'4.9', reviews:'127', rate:120, skills:['Python','TensorFlow','NLP','LLMs'] },
-      { initial:'R', name:'Raj Patel',       title:'Deep Learning Specialist',        rate:95 },
-      { initial:'A', name:'Amy Chen',        title:'AI Product Manager' },
-    ],
-  },
-  {
-    emoji: '📷', label: 'Photography & Video',
-    gradient: 'linear-gradient(135deg,#f59e0b,#d97706)',
-    badgeBg: '#fef3c7', badgeColor: '#92400e',
-    profiles: [
-      { initial:'M', name:'Marco Rossi',    title:'Commercial Photographer & Director', company:'Featured in Vogue & NatGeo', rating:'4.8', reviews:'93', rate:85, skills:['Portrait','Lightroom','Cinematic','Branding'] },
-      { initial:'J', name:'Julia Park',      title:'Wedding & Event Videographer',    rate:70 },
-      { initial:'D', name:'David Okafor',    title:'Street & Documentary Photographer' },
-    ],
-  },
-  {
-    emoji: '⚖️', label: 'Legal',
-    gradient: 'linear-gradient(135deg,#64748b,#334155)',
-    badgeBg: '#f1f5f9', badgeColor: '#334155',
-    profiles: [
-      { initial:'P', name:'Priya Sharma',   title:'Corporate & Contract Law Expert',  company:'15+ yrs BigLaw experience', rating:'4.9', reviews:'74', rate:150, skills:['Contracts','IP Law','Startups','Compliance'] },
-      { initial:'T', name:'Thomas Blake',    title:'Employment & Labour Lawyer',       rate:130 },
-      { initial:'N', name:'Nina Kovac',      title:'Immigration & Visa Consultant' },
-    ],
-  },
-  {
-    emoji: '🎵', label: 'Music',
-    gradient: 'linear-gradient(135deg,#8b5cf6,#6d28d9)',
-    badgeBg: '#ede9fe', badgeColor: '#5b21b6',
-    profiles: [
-      { initial:'L', name:'Lena Müller',    title:'Music Producer & Songwriter',      company:'5 Platinum Albums', rating:'5.0', reviews:'58', rate:90, skills:['Production','Mixing','Piano','Songwriting'] },
-      { initial:'C', name:'Carlos Reyes',    title:'Guitar & Music Theory Coach',      rate:55 },
-      { initial:'Y', name:'Yuki Tanaka',     title:'Vocal Performance Trainer' },
-    ],
-  },
-  {
-    emoji: '💰', label: 'Finance',
-    gradient: 'linear-gradient(135deg,#10b981,#047857)',
-    badgeBg: '#d1fae5', badgeColor: '#065f46',
-    profiles: [
-      { initial:'K', name:'Kevin Hart',     title:'Investment & Wealth Strategist',   company:'ex-Goldman Sachs VP', rating:'4.8', reviews:'112', rate:175, skills:['Stocks','Real Estate','Tax','Crypto'] },
-      { initial:'S', name:'Sofia Laurent',   title:'Personal Finance & Budgeting',     rate:80 },
-      { initial:'A', name:'Arjun Mehta',     title:'Startup CFO Advisor' },
-    ],
-  },
-  {
-    emoji: '💼', label: 'Business',
-    gradient: 'linear-gradient(135deg,#0ea5e9,#0284c7)',
-    badgeBg: '#e0f2fe', badgeColor: '#0369a1',
-    profiles: [
-      { initial:'E', name:'Emma Williams',  title:'Startup Founder & Scale-up Coach', company:'3x Founder, $50M raised', rating:'4.9', reviews:'201', rate:140, skills:['Strategy','Fundraising','OKRs','GTM'] },
-      { initial:'B', name:'Ben Thompson',    title:'Business Development Expert',      rate:110 },
-      { initial:'O', name:'Olivia Stern',    title:'E-commerce & DTC Advisor' },
-    ],
-  },
-  {
-    emoji: '💪', label: 'Health & Fitness',
-    gradient: 'linear-gradient(135deg,#ef4444,#b91c1c)',
-    badgeBg: '#fee2e2', badgeColor: '#991b1b',
-    profiles: [
-      { initial:'J', name:'James Carter',   title:'Certified Strength & Nutrition Coach', company:'NSCA & Precision Nutrition', rating:'4.9', reviews:'185', rate:65, skills:['Strength','Keto','Mindset','Rehab'] },
-      { initial:'M', name:'Maya Singh',      title:'Yoga & Mindfulness Instructor',    rate:50 },
-      { initial:'F', name:'Felix Krause',    title:'Sports Performance Coach' },
-    ],
-  },
-  {
-    emoji: '🎨', label: 'Design',
-    gradient: 'linear-gradient(135deg,#ec4899,#be185d)',
-    badgeBg: '#fce7f3', badgeColor: '#9d174d',
-    profiles: [
-      { initial:'Z', name:'Zara Ahmed',     title:'Senior UX/UI Designer',            company:'ex-Airbnb & Figma team', rating:'4.8', reviews:'96', rate:100, skills:['Figma','Design Systems','UX Research','Branding'] },
-      { initial:'N', name:'Nils Berger',     title:'Brand & Visual Identity Expert',   rate:85 },
-      { initial:'P', name:'Paula Vega',      title:'Motion & Graphic Designer' },
-    ],
-  },
-  {
-    emoji: '📋', label: 'Project Management',
-    gradient: 'linear-gradient(135deg,#f97316,#c2410c)',
-    badgeBg: '#ffedd5', badgeColor: '#9a3412',
-    profiles: [
-      { initial:'H', name:'Hassan Ali',     title:'PMP & Agile Coach',                company:'Managed $200M+ portfolios', rating:'4.7', reviews:'88', rate:120, skills:['Agile','Scrum','JIRA','Risk Mgmt'] },
-      { initial:'C', name:'Claire Dubois',   title:'Product Owner & Scrum Master',     rate:100 },
-      { initial:'V', name:'Victor Ngo',      title:'PMO & Delivery Lead' },
-    ],
-  },
-  {
-    emoji: '📢', label: 'Marketing',
-    gradient: 'linear-gradient(135deg,#14b8a6,#0f766e)',
-    badgeBg: '#ccfbf1', badgeColor: '#134e4a',
-    profiles: [
-      { initial:'G', name:'Grace Lee',      title:'Growth & Performance Marketer',    company:'Scaled 3 brands to $1M ARR', rating:'4.9', reviews:'143', rate:110, skills:['SEO','Paid Ads','Email','Analytics'] },
-      { initial:'I', name:'Ivan Petrov',     title:'Content & Social Media Strategist',rate:75 },
-      { initial:'R', name:'Rachel Kim',      title:'Brand Storytelling Expert' },
-    ],
-  },
-];
+// Per-category visual config (emoji, colours, gradient)
+const categoryConfig = {
+  'artificial-intelligence': { emoji: '🤖', label: 'Artificial Intelligence', gradient: 'linear-gradient(135deg,#3b82f6,#1d4ed8)', badgeBg: '#dbeafe', badgeColor: '#1e40af' },
+  'photography-video':       { emoji: '📷', label: 'Photography & Video',     gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', badgeBg: '#fef3c7', badgeColor: '#92400e' },
+  'legal':                   { emoji: '⚖️', label: 'Legal',                   gradient: 'linear-gradient(135deg,#64748b,#334155)', badgeBg: '#f1f5f9', badgeColor: '#334155' },
+  'music':                   { emoji: '🎵', label: 'Music',                   gradient: 'linear-gradient(135deg,#8b5cf6,#6d28d9)', badgeBg: '#ede9fe', badgeColor: '#5b21b6' },
+  'finance':                 { emoji: '💰', label: 'Finance',                 gradient: 'linear-gradient(135deg,#10b981,#047857)', badgeBg: '#d1fae5', badgeColor: '#065f46' },
+  'business':                { emoji: '💼', label: 'Business',                gradient: 'linear-gradient(135deg,#0ea5e9,#0284c7)', badgeBg: '#e0f2fe', badgeColor: '#0369a1' },
+  'health-fitness':          { emoji: '💪', label: 'Health & Fitness',        gradient: 'linear-gradient(135deg,#ef4444,#b91c1c)', badgeBg: '#fee2e2', badgeColor: '#991b1b' },
+  'design-architecture':     { emoji: '🎨', label: 'Design',                  gradient: 'linear-gradient(135deg,#ec4899,#be185d)', badgeBg: '#fce7f3', badgeColor: '#9d174d' },
+  'project-management':      { emoji: '📋', label: 'Project Management',      gradient: 'linear-gradient(135deg,#f97316,#c2410c)', badgeBg: '#ffedd5', badgeColor: '#9a3412' },
+  'marketing':               { emoji: '📢', label: 'Marketing',               gradient: 'linear-gradient(135deg,#14b8a6,#0f766e)', badgeBg: '#ccfbf1', badgeColor: '#134e4a' },
+  'development':             { emoji: '💻', label: 'Development',             gradient: 'linear-gradient(135deg,#6366f1,#4338ca)', badgeBg: '#eef2ff', badgeColor: '#3730a3' },
+  'infrastructure':          { emoji: '☁️', label: 'Infrastructure',          gradient: 'linear-gradient(135deg,#0891b2,#0e7490)', badgeBg: '#cffafe', badgeColor: '#164e63' },
+  'hr':                      { emoji: '👥', label: 'HR',                      gradient: 'linear-gradient(135deg,#a78bfa,#7c3aed)', badgeBg: '#f5f3ff', badgeColor: '#5b21b6' },
+  'competitive-exams':       { emoji: '📚', label: 'Competitive Exams',       gradient: 'linear-gradient(135deg,#f43f5e,#be123c)', badgeBg: '#fff1f2', badgeColor: '#9f1239' },
+};
+
+const fallbackProfile = (catLabel) => ({
+  initial: catLabel.charAt(0).toUpperCase(),
+  name: 'Be the first mentor',
+  title: `Join as a ${catLabel} mentor`,
+  rating: '0.0',
+  reviews: 0,
+  rate: 0,
+  skills: [],
+});
+
+// Build pillCategories from real DB data + visual config
+const pillCategories = computed(() => {
+  return props.categories.map(cat => {
+    const cfg = categoryConfig[cat.slug] || {
+      emoji: '📌', label: cat.name,
+      gradient: 'linear-gradient(135deg,#6366f1,#4338ca)',
+      badgeBg: '#eef2ff', badgeColor: '#3730a3',
+    };
+    const real = props.heroCategoryMentors?.[cat.slug] || [];
+    const profiles = [0, 1, 2].map(i => real[i] ?? fallbackProfile(cfg.label));
+    return { ...cfg, profiles };
+  });
+});
+
 const currentCatIndex = ref(0);
 let pillTimer = null;
 onMounted(() => {
   pillTimer = setInterval(() => {
-    currentCatIndex.value = (currentCatIndex.value + 1) % pillCategories.length;
+    currentCatIndex.value = (currentCatIndex.value + 1) % pillCategories.value.length;
   }, 2200);
 });
 onUnmounted(() => clearInterval(pillTimer));
@@ -499,14 +447,7 @@ const steps = [
 ];
 
 function getCatEmoji(slug) {
-  const map = {
-    'artificial-intelligence': '🤖', 'business': '💼', 'competitive-exams': '📚',
-    'design-architecture': '🎨',     'development': '💻', 'finance': '💰',
-    'health-fitness': '💪',           'hr': '👥',          'infrastructure': '☁️',
-    'legal': '⚖️',                    'marketing': '📢',   'music': '🎵',
-    'photography-video': '📷',        'project-management': '📋',
-  };
-  return map[slug] || '📌';
+  return categoryConfig[slug]?.emoji || '📌';
 }
 </script>
 

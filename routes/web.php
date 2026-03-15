@@ -92,6 +92,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/users', [Admin\UserController::class, 'store'])->name('users.store');
     Route::get('/users/{user}/edit', [Admin\UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [Admin\UserController::class, 'update'])->name('users.update');
+    Route::patch('/users/{user}', [Admin\UserController::class, 'patch'])->name('users.patch');
     Route::delete('/users/{user}', [Admin\UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('/categories', [Admin\CategoryController::class, 'index'])->name('categories.index');

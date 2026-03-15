@@ -73,6 +73,11 @@
               </td>
               <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-2">
+                  <button v-if="user.role === 'mentor'" @click="toggleFeatured(user)"
+                    class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
+                    :class="user.is_featured ? 'text-amber-700 bg-amber-50 hover:bg-amber-100' : 'text-slate-500 hover:text-amber-700 hover:bg-amber-50'">
+                    {{ user.is_featured ? '★ Featured' : '☆ Feature' }}
+                  </button>
                   <Link :href="`/admin/users/${user.id}/edit`" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors">Edit</Link>
                   <button @click="deleteUser(user)" class="text-xs text-red-600 hover:text-red-800 font-medium px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors">Delete</button>
                 </div>
@@ -129,6 +134,10 @@ function applyFilters() {
 
 function goToPage(page) {
   router.get('/admin/users', { search: search.value, role: role.value, page }, { preserveState: true });
+}
+
+function toggleFeatured(user) {
+  router.patch(`/admin/users/${user.id}`, { is_featured: !user.is_featured }, { preserveState: true });
 }
 
 function deleteUser(user) {
