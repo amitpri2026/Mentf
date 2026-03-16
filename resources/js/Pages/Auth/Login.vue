@@ -71,16 +71,6 @@
           Don't have an account?
           <Link href="/register" class="text-indigo-600 font-semibold hover:text-indigo-800">Sign up free</Link>
         </p>
-
-        <!-- Demo credentials -->
-        <div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
-          <p class="text-xs font-semibold text-gray-600 mb-2">Demo Accounts:</p>
-          <div class="space-y-1">
-            <p class="text-xs text-gray-600">Admin: admin@mentf.com / password</p>
-            <p class="text-xs text-gray-600">Mentor: sarah@mentf.com / password</p>
-            <p class="text-xs text-gray-600">Mentee: alex@example.com / password</p>
-          </div>
-        </div>
       </div>
     </div>
   </div>
