@@ -1,31 +1,25 @@
 <template>
   <Link :href="`/packages/${pkg.slug}`" class="card group hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 block">
-    <!-- Thumbnail / Header -->
-    <div class="h-36 bg-slate-100 relative overflow-hidden">
-      <img v-if="pkg.thumbnail_url" :src="pkg.thumbnail_url" :alt="pkg.title" class="w-full h-full object-cover" />
-      <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-slate-100">
-        <svg class="w-12 h-12 text-blue-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-        </svg>
-      </div>
-
-      <div class="absolute bottom-3 left-3 right-3 flex items-end justify-between">
-        <span class="bg-white/95 text-slate-700 text-xs font-medium px-2.5 py-1 rounded-md shadow-sm">
-          {{ pkg.package_type?.name || 'Program' }}
-        </span>
-        <span v-if="pkg.is_featured" class="bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded-md">
+    <!-- Header -->
+    <div class="px-5 pt-5 pb-3 border-b border-slate-100">
+      <div class="flex items-start justify-between gap-2">
+        <h3 class="font-bold text-slate-900 text-base leading-snug line-clamp-2">{{ pkg.title }}</h3>
+        <span v-if="pkg.is_featured" class="shrink-0 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded-md">
           Featured
         </span>
       </div>
     </div>
 
     <div class="p-5">
-      <!-- Category badge -->
-      <span class="inline-flex items-center text-xs font-medium text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-md mb-2.5">
-        {{ pkg.category?.name }}
-      </span>
-
-      <h3 class="font-semibold text-slate-900 text-sm leading-snug mb-3 line-clamp-2">{{ pkg.title }}</h3>
+      <!-- Category & type badges -->
+      <div class="flex items-center gap-2 mb-2.5">
+        <span class="inline-flex items-center text-xs font-medium text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-md">
+          {{ pkg.category?.name }}
+        </span>
+        <span class="inline-flex items-center text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-md">
+          {{ pkg.package_type?.name || 'Program' }}
+        </span>
+      </div>
 
       <!-- Mentor -->
       <div class="flex items-center gap-2 mb-3">
