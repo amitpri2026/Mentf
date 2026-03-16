@@ -86,6 +86,15 @@
           Blog
         </AdminNavLink>
 
+        <AdminNavLink href="/admin/contact-inquiries" :active="isActive('/admin/contact-inquiries')">
+          <template #icon>
+            <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+          </template>
+          Contact Inquiries
+        </AdminNavLink>
+
         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mt-4 mb-2">Config</p>
 
         <AdminNavLink href="/admin/settings" :active="isActive('/admin/settings')">
@@ -155,8 +164,9 @@ const pageTitle = computed(() => {
   if (path.startsWith('/admin/enrollments')) return 'Enrollments';
   if (path.startsWith('/admin/cms'))        return 'CMS Pages';
   if (path.startsWith('/admin/blog'))       return 'Blog';
-  if (path.startsWith('/admin/settings'))   return 'Settings';
-  if (path.includes('/packages'))           return 'Mentor Packages';
+  if (path.startsWith('/admin/settings'))            return 'Settings';
+  if (path.startsWith('/admin/contact-inquiries'))   return 'Contact Inquiries';
+  if (path.includes('/packages'))                    return 'Mentor Packages';
   return 'Admin Panel';
 });
 

@@ -20,6 +20,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about',           [CmsPagesController::class, 'about'])->name('about');
 Route::get('/privacy',         [CmsPagesController::class, 'privacy'])->name('privacy');
 Route::get('/contact',         [CmsPagesController::class, 'contact'])->name('contact');
+Route::post('/contact',        [CmsPagesController::class, 'contactStore'])->name('contact.store');
 Route::get('/blog',                  [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}',           [BlogController::class, 'show'])->name('blog.show');
 Route::post('/blog/{slug}/comments', [BlogCommentController::class, 'store'])->name('blog.comments.store');
@@ -121,6 +122,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('/cms',         [Admin\CmsController::class, 'index'])->name('cms.index');
     Route::post('/cms',        [Admin\CmsController::class, 'update'])->name('cms.update');
+
+    Route::get('/contact-inquiries',                      [Admin\ContactInquiryController::class, 'index'])->name('contact-inquiries.index');
+    Route::patch('/contact-inquiries/{inquiry}/read',     [Admin\ContactInquiryController::class, 'markRead'])->name('contact-inquiries.read');
+    Route::delete('/contact-inquiries/{inquiry}',         [Admin\ContactInquiryController::class, 'destroy'])->name('contact-inquiries.destroy');
 
     Route::get('/blog',              [Admin\BlogController::class, 'index'])->name('blog.index');
     Route::get('/blog/create',       [Admin\BlogController::class, 'create'])->name('blog.create');
