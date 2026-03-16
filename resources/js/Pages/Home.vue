@@ -162,7 +162,7 @@
                         <span class="text-sm text-slate-400">/hr</span>
                       </div>
                       <div v-else></div>
-                      <Link href="/mentors" class="btn-primary text-xs px-4 py-2">View Profile</Link>
+                      <Link :href="`/mentors/${pillCategories[currentCatIndex].profiles[0].slug}`" class="btn-primary text-xs px-4 py-2">View Profile</Link>
                     </div>
                   </div>
 
@@ -187,8 +187,8 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <p class="text-center text-xs font-semibold text-slate-400 uppercase tracking-wider mb-5">Mentors from leading companies</p>
         <div class="flex flex-wrap justify-center items-center gap-8 lg:gap-12">
-          <span v-for="co in ['Google', 'Microsoft', 'Amazon', 'Meta', 'Apple', 'Netflix']" :key="co"
-            class="text-slate-400 font-bold text-lg tracking-tight hover:text-slate-600 transition-colors cursor-default">
+          <span v-for="co in ['Google', 'Goldman Sachs', 'McKinsey', 'Adobe', 'JP Morgan', 'Nike', 'Deloitte', 'Universal Music', 'National Geographic', 'Berklee']" :key="co"
+            class="text-slate-400 font-bold text-base tracking-tight hover:text-slate-600 transition-colors cursor-default">
             {{ co }}
           </span>
         </div>

@@ -98,6 +98,7 @@ class HomeController extends Controller
             )->take(3);
 
             $heroCategoryMentors[$cat->slug] = $catMentors->map(fn($m) => [
+                'slug'    => $m->slug,
                 'name'    => $m->name,
                 'initial' => mb_strtoupper(mb_substr($m->name, 0, 1)),
                 'title'   => $m->title ?? '',
