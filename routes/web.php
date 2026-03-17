@@ -105,6 +105,23 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('/users/{user}', [Admin\UserController::class, 'patch'])->name('users.patch');
     Route::delete('/users/{user}', [Admin\UserController::class, 'destroy'])->name('users.destroy');
 
+    // Admin full profile editing for any user
+    Route::get('/users/{user}/profile', [Admin\UserProfileController::class, 'edit'])->name('users.profile.edit');
+    Route::post('/users/{user}/profile', [Admin\UserProfileController::class, 'update'])->name('users.profile.update');
+    Route::post('/users/{user}/profile/photo', [Admin\UserProfileController::class, 'updatePhoto'])->name('users.profile.photo');
+    Route::post('/users/{user}/education', [Admin\UserProfileController::class, 'storeEducation'])->name('users.education.store');
+    Route::put('/users/{user}/education/{education}', [Admin\UserProfileController::class, 'updateEducation'])->name('users.education.update');
+    Route::delete('/users/{user}/education/{education}', [Admin\UserProfileController::class, 'destroyEducation'])->name('users.education.destroy');
+    Route::post('/users/{user}/professional', [Admin\UserProfileController::class, 'storeProfessional'])->name('users.professional.store');
+    Route::put('/users/{user}/professional/{professional}', [Admin\UserProfileController::class, 'updateProfessional'])->name('users.professional.update');
+    Route::delete('/users/{user}/professional/{professional}', [Admin\UserProfileController::class, 'destroyProfessional'])->name('users.professional.destroy');
+    Route::post('/users/{user}/achievement', [Admin\UserProfileController::class, 'storeAchievement'])->name('users.achievement.store');
+    Route::put('/users/{user}/achievement/{achievement}', [Admin\UserProfileController::class, 'updateAchievement'])->name('users.achievement.update');
+    Route::delete('/users/{user}/achievement/{achievement}', [Admin\UserProfileController::class, 'destroyAchievement'])->name('users.achievement.destroy');
+    Route::post('/users/{user}/certificate', [Admin\UserProfileController::class, 'storeCertificate'])->name('users.certificate.store');
+    Route::put('/users/{user}/certificate/{certificate}', [Admin\UserProfileController::class, 'updateCertificate'])->name('users.certificate.update');
+    Route::delete('/users/{user}/certificate/{certificate}', [Admin\UserProfileController::class, 'destroyCertificate'])->name('users.certificate.destroy');
+
     Route::get('/categories', [Admin\CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [Admin\CategoryController::class, 'create'])->name('categories.create');
     Route::post('/categories', [Admin\CategoryController::class, 'store'])->name('categories.store');

@@ -2,14 +2,14 @@
   <AppLayout>
     <Head :title="mentor.name" />
 
-    <!-- Cover Photo -->
-    <div class="h-48 lg:h-64 bg-gradient-to-br from-indigo-600 to-purple-700 relative overflow-hidden">
-      <img v-if="mentor.cover_photo_url" :src="mentor.cover_photo_url" class="w-full h-full object-cover" alt="" />
+    <!-- Cover Photo (only shown if mentor has uploaded one) -->
+    <div v-if="mentor.cover_photo_url" class="h-48 lg:h-64 relative overflow-hidden">
+      <img :src="mentor.cover_photo_url" class="w-full h-full object-cover" alt="" />
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Profile header -->
-      <div class="relative -mt-16 pb-8">
+      <div :class="mentor.cover_photo_url ? 'relative -mt-16 pb-8' : 'relative pt-8 pb-8'">
         <div class="flex flex-col lg:flex-row lg:items-end gap-6">
           <img
             :src="mentor.profile_photo_url"
@@ -53,7 +53,7 @@
           <!-- About -->
           <div class="bg-white rounded-2xl border border-gray-100 p-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4">About</h2>
-            <p class="text-gray-700 leading-relaxed">{{ mentor.bio }}</p>
+            <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">{{ mentor.bio }}</p>
           </div>
 
           <!-- Skills -->

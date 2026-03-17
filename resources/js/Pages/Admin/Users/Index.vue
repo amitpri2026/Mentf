@@ -83,6 +83,7 @@
                     Packages
                   </Link>
                   <Link :href="`/admin/users/${user.id}/edit`" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors">Edit</Link>
+                  <Link :href="`/admin/users/${user.id}/profile`" class="text-xs text-violet-600 hover:text-violet-800 font-medium px-3 py-1.5 rounded-lg hover:bg-violet-50 transition-colors">Full Profile</Link>
                   <button @click="deleteUser(user)" class="text-xs text-red-600 hover:text-red-800 font-medium px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors">Delete</button>
                 </div>
               </td>
