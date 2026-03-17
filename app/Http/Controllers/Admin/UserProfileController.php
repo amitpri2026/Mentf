@@ -95,8 +95,8 @@ class UserProfileController extends Controller
             'institution'    => 'required|string|max:255',
             'degree'         => 'required|string|max:255',
             'field_of_study' => 'nullable|string|max:255',
-            'start_year'     => 'required|integer|min:1950|max:2030',
-            'end_year'       => 'nullable|integer|min:1950|max:2030',
+            'start_year'     => 'nullable|integer|min:1950|max:2030',
+            'end_year'       => 'required|integer|min:1950|max:2030',
             'is_current'     => 'boolean',
             'description'    => 'nullable|string|max:1000',
         ]);
@@ -116,8 +116,8 @@ class UserProfileController extends Controller
             'institution'    => 'required|string|max:255',
             'degree'         => 'required|string|max:255',
             'field_of_study' => 'nullable|string|max:255',
-            'start_year'     => 'required|integer|min:1950|max:2030',
-            'end_year'       => 'nullable|integer|min:1950|max:2030',
+            'start_year'     => 'nullable|integer|min:1950|max:2030',
+            'end_year'       => 'required|integer|min:1950|max:2030',
             'is_current'     => 'boolean',
             'description'    => 'nullable|string|max:1000',
         ]);
@@ -139,7 +139,7 @@ class UserProfileController extends Controller
         $validated = $request->validate([
             'company'     => 'required|string|max:255',
             'position'    => 'required|string|max:255',
-            'start_date'  => 'required|date',
+            'start_date'  => 'nullable|date',
             'end_date'    => 'nullable|date',
             'is_current'  => 'boolean',
             'description' => 'nullable|string|max:1000',
@@ -160,7 +160,7 @@ class UserProfileController extends Controller
         $validated = $request->validate([
             'company'     => 'required|string|max:255',
             'position'    => 'required|string|max:255',
-            'start_date'  => 'required|date',
+            'start_date'  => 'nullable|date',
             'end_date'    => 'nullable|date',
             'is_current'  => 'boolean',
             'description' => 'nullable|string|max:1000',
@@ -224,7 +224,7 @@ class UserProfileController extends Controller
     {
         $validated = $request->validate([
             'name'           => 'required|string|max:255',
-            'issuing_org'    => 'required|string|max:255',
+            'issuing_org'    => 'nullable|string|max:255',
             'issue_date'     => 'nullable|date',
             'expiry_date'    => 'nullable|date',
             'no_expiry'      => 'boolean',
@@ -245,7 +245,7 @@ class UserProfileController extends Controller
 
         $validated = $request->validate([
             'name'           => 'required|string|max:255',
-            'issuing_org'    => 'required|string|max:255',
+            'issuing_org'    => 'nullable|string|max:255',
             'issue_date'     => 'nullable|date',
             'expiry_date'    => 'nullable|date',
             'no_expiry'      => 'boolean',

@@ -13,7 +13,7 @@ class ProfessionalController extends Controller
         $validated = $request->validate([
             'company'     => 'required|string|max:255',
             'position'    => 'required|string|max:255',
-            'start_date'  => 'required|date',
+            'start_date'  => 'nullable|date',
             'end_date'    => 'nullable|date|after:start_date',
             'is_current'  => 'boolean',
             'description' => 'nullable|string|max:1000',
@@ -34,7 +34,7 @@ class ProfessionalController extends Controller
         $validated = $request->validate([
             'company'     => 'required|string|max:255',
             'position'    => 'required|string|max:255',
-            'start_date'  => 'required|date',
+            'start_date'  => 'nullable|date',
             'end_date'    => 'nullable|date',
             'is_current'  => 'boolean',
             'description' => 'nullable|string|max:1000',

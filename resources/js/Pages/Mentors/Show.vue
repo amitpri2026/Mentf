@@ -81,11 +81,6 @@
                 <div>
                   <h4 class="font-semibold text-gray-900">{{ exp.position }}</h4>
                   <p class="text-indigo-600 text-sm font-medium">{{ exp.company }}</p>
-                  <p class="text-xs text-gray-500 mt-0.5">
-                    {{ exp.start_date }} — {{ exp.is_current ? 'Present' : exp.end_date }}
-                    <span v-if="exp.location"> · {{ exp.location }}</span>
-                  </p>
-                  <p v-if="exp.description" class="text-sm text-gray-600 mt-2">{{ exp.description }}</p>
                 </div>
               </div>
             </div>

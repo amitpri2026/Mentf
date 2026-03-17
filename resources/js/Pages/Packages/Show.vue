@@ -9,22 +9,15 @@
 
           <!-- Header -->
           <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div class="h-48 bg-gradient-to-br from-blue-500 to-blue-700 relative">
-              <img v-if="pkg.banner_url || pkg.thumbnail_url"
-                :src="pkg.banner_url || pkg.thumbnail_url"
+            <div v-if="pkg.banner_url || pkg.thumbnail_url" class="h-48 relative">
+              <img :src="pkg.banner_url || pkg.thumbnail_url"
                 class="w-full h-full object-cover" alt="" />
-              <div class="absolute bottom-4 left-4 flex gap-2">
-                <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full border border-white/30">
-                  {{ pkg.package_type?.name }}
-                </span>
-                <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full border border-white/30 capitalize">
-                  {{ pkg.level }} Level
-                </span>
-              </div>
             </div>
             <div class="p-6">
               <div class="flex flex-wrap items-center gap-2 mb-3">
                 <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">{{ pkg.category?.name }}</span>
+                <span class="text-xs font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">{{ pkg.package_type?.name }}</span>
+                <span class="text-xs font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md capitalize">{{ pkg.level }} Level</span>
                 <span v-if="pkg.is_featured" class="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-0.5 rounded-md">⭐ Featured</span>
               </div>
               <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ pkg.title }}</h1>

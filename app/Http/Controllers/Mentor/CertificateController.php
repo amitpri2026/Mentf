@@ -12,7 +12,7 @@ class CertificateController extends Controller
     {
         $validated = $request->validate([
             'name'           => 'required|string|max:255',
-            'issuing_org'    => 'required|string|max:255',
+            'issuing_org'    => 'nullable|string|max:255',
             'issue_date'     => 'nullable|date',
             'expiry_date'    => 'nullable|date',
             'no_expiry'      => 'boolean',
@@ -33,7 +33,7 @@ class CertificateController extends Controller
 
         $validated = $request->validate([
             'name'           => 'required|string|max:255',
-            'issuing_org'    => 'required|string|max:255',
+            'issuing_org'    => 'nullable|string|max:255',
             'issue_date'     => 'nullable|date',
             'expiry_date'    => 'nullable|date',
             'no_expiry'      => 'boolean',

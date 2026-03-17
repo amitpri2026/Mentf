@@ -238,12 +238,12 @@
                   <input v-model="form.field_of_study" type="text" placeholder="e.g. Computer Science" class="input-field" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-1.5">Start Year <span class="text-red-500">*</span></label>
+                  <label class="block text-sm font-medium text-slate-700 mb-1.5">Start Year</label>
                   <input v-model="form.start_year" type="number" min="1950" max="2030" class="input-field" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-1.5">End Year</label>
-                  <input v-model="form.end_year" type="number" min="1950" max="2030" :disabled="form.is_current" class="input-field disabled:opacity-50" />
+                  <label class="block text-sm font-medium text-slate-700 mb-1.5">End Year <span class="text-red-500">*</span></label>
+                  <input v-model="form.end_year" type="number" min="1950" max="2030" :disabled="form.is_current" class="input-field disabled:opacity-50" required />
                   <label class="flex items-center gap-2 mt-1.5 cursor-pointer">
                     <input type="checkbox" v-model="form.is_current" class="rounded" />
                     <span class="text-xs text-slate-500">Currently enrolled</span>
@@ -286,7 +286,7 @@
                   <input v-model="form.location" type="text" placeholder="City, Country" class="input-field" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-1.5">Start Date <span class="text-red-500">*</span></label>
+                  <label class="block text-sm font-medium text-slate-700 mb-1.5">Start Date</label>
                   <input v-model="form.start_date" type="month" class="input-field" />
                 </div>
                 <div>
@@ -366,7 +366,7 @@
                   <input v-model="form.name" type="text" placeholder="e.g. AWS Certified Solutions Architect" class="input-field" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-1.5">Issuing Organisation <span class="text-red-500">*</span></label>
+                  <label class="block text-sm font-medium text-slate-700 mb-1.5">Issuing Organisation</label>
                   <input v-model="form.issuing_org" type="text" placeholder="e.g. Amazon Web Services" class="input-field" />
                 </div>
                 <div>
