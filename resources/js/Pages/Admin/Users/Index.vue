@@ -39,9 +39,8 @@
             <tr v-for="user in users.data" :key="user.id" class="hover:bg-gray-50 transition-colors">
               <td class="px-6 py-4">
                 <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-semibold text-sm flex-shrink-0">
-                    {{ user.name.charAt(0) }}
-                  </div>
+                  <img :src="user.profile_photo_url" :alt="user.name"
+                    class="w-9 h-9 rounded-full object-cover flex-shrink-0" />
                   <div>
                     <p class="text-sm font-medium text-gray-900">{{ user.name }}</p>
                     <p class="text-xs text-gray-500">{{ user.email }}</p>

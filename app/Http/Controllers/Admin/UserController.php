@@ -23,7 +23,17 @@ class UserController extends Controller
             $query->where('role', $request->role);
         }
 
-        $users = $query->latest()->paginate(20);
+        $users = $query->latest()->paginate(20)->through(fn($u) => [
+            'id'               => $u->id,
+            'name'             => $u->name,
+            'email'            => $u->email,
+            'role'             => $u->role,
+            'slug'             => $u->slug,
+            'is_active'        => $u->is_active,
+            'is_featured'      => $u->is_featured,
+            'created_at'       => $u->created_at,
+            'profile_photo_url'=> $u->profile_photo_url,
+        ]);
 
         return Inertia::render('Admin/Users/Index', [
             'users' => $users,
