@@ -39,6 +39,9 @@ class HandleInertiaRequests extends Middleware
                 ->select('id', 'name', 'slug', 'icon', 'color')
                 ->get(),
             'heroTagline' => fn () => SiteSetting::get('hero_tagline') ?: null,
+            'unread_notifications' => fn () => $request->user()?->isAdmin()
+                ? \App\Models\AdminNotification::whereNull('read_at')->count()
+                : 0,
         ];
     }
 }

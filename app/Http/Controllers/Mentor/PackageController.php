@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Mentor;
 
+use App\Helpers\MailHelper;
 use App\Http\Controllers\Controller;
+use App\Mail\PackageCreatedMail;
 use App\Models\Category;
 use App\Models\Package;
 use App\Models\PackageType;
+use App\Services\AdminNotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -71,6 +75,17 @@ class PackageController extends Controller
             $path = $request->file('banner')->store("packages/{$package->id}/banner", 'public');
             $package->update(['banner' => $path]);
         }
+
+        // Send package creation email to mentor (BCC admin)
+        try {
+            $mail = Mail::to(auth()->user()->email);
+            $adminBcc = MailHelper::adminBcc();
+            if ($adminBcc && $adminBcc !== auth()->user()->email) $mail->bcc($adminBcc);
+            $mail->send(new PackageCreatedMail(auth()->user(), $package));
+        } catch (\Exception $e) {}
+
+        // Admin notification
+        AdminNotificationService::packageCreated(auth()->user()->name, $package->title);
 
         return redirect()->route('mentor.packages.edit', $package)
             ->with('success', 'Package created! Add topics below.');

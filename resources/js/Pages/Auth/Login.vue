@@ -54,7 +54,7 @@
               <input v-model="form.remember" type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
               Remember me
             </label>
-            <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Forgot password?</a>
+            <Link href="/forgot-password" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Forgot password?</Link>
           </div>
 
           <button

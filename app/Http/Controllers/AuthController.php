@@ -1,11 +1,14 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Helpers\MailHelper;
+use App\Mail\WelcomeMail;
 use App\Models\User;
+use App\Services\AdminNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 
@@ -19,21 +22,16 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-
             $user = Auth::user();
-            if ($user->isAdmin()) {
-                return redirect()->intended('/admin');
-            } elseif ($user->isMentor()) {
-                return redirect()->intended('/dashboard/mentor');
-            } else {
-                return redirect()->intended('/dashboard');
-            }
+            if ($user->isAdmin())       return redirect()->intended('/admin');
+            elseif ($user->isMentor())  return redirect()->intended('/dashboard/mentor');
+            else                        return redirect()->intended('/dashboard');
         }
 
         return back()->withErrors(['email' => 'The provided credentials do not match our records.']);
@@ -47,25 +45,37 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => 'required|in:mentor,mentee',
+            'role'     => 'required|in:mentor,mentee',
         ]);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role'     => $request->role,
         ]);
+
+        // Send welcome email (BCC admin)
+        try {
+            $mail = Mail::to($user->email);
+            $adminBcc = MailHelper::adminBcc();
+            if ($adminBcc && $adminBcc !== $user->email) {
+                $mail->bcc($adminBcc);
+            }
+            $mail->send(new WelcomeMail($user));
+        } catch (\Exception $e) {
+            // Don't fail registration if email fails
+        }
+
+        // Admin notification
+        AdminNotificationService::registration($user->name, $user->email, $user->role);
 
         Auth::login($user);
 
-        if ($user->isMentor()) {
-            return redirect('/dashboard/mentor');
-        }
-
+        if ($user->isMentor()) return redirect('/dashboard/mentor');
         return redirect('/dashboard');
     }
 

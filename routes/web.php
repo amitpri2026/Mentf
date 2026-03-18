@@ -5,10 +5,13 @@ use App\Http\Controllers\Mentor;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogCommentController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CmsPagesController;
 use App\Http\Controllers\EnrollController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\HelpdeskController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MentorController;
 use App\Http\Controllers\PackageController;
@@ -37,6 +40,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'requestForm'])->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetForm'])->name('password.reset');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
@@ -50,6 +57,20 @@ Route::post('/packages/{package}/enroll', [EnrollController::class, 'store'])
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'mentee'])->name('dashboard');
     Route::get('/dashboard/mentor', [DashboardController::class, 'mentor'])->name('dashboard.mentor');
+
+    // Chat routes
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/start', [ChatController::class, 'startOrFind'])->name('chat.start');
+    Route::get('/chat/{conversation}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/{conversation}/send', [ChatController::class, 'send'])->name('chat.send');
+    Route::get('/chat/{conversation}/poll', [ChatController::class, 'poll'])->name('chat.poll');
+
+    // Helpdesk routes
+    Route::get('/helpdesk', [HelpdeskController::class, 'index'])->name('helpdesk.index');
+    Route::get('/helpdesk/create', [HelpdeskController::class, 'create'])->name('helpdesk.create');
+    Route::post('/helpdesk', [HelpdeskController::class, 'store'])->name('helpdesk.store');
+    Route::get('/helpdesk/{ticket}', [HelpdeskController::class, 'show'])->name('helpdesk.show');
+    Route::post('/helpdesk/{ticket}/reply', [HelpdeskController::class, 'reply'])->name('helpdesk.reply');
 });
 
 // Mentor routes
@@ -143,6 +164,23 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/contact-inquiries',                      [Admin\ContactInquiryController::class, 'index'])->name('contact-inquiries.index');
     Route::patch('/contact-inquiries/{inquiry}/read',     [Admin\ContactInquiryController::class, 'markRead'])->name('contact-inquiries.read');
     Route::delete('/contact-inquiries/{inquiry}',         [Admin\ContactInquiryController::class, 'destroy'])->name('contact-inquiries.destroy');
+
+    // Admin notifications
+    Route::get('/notifications', [Admin\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [Admin\NotificationController::class, 'markRead'])->name('notifications.read');
+    Route::post('/notifications/mark-all-read', [Admin\NotificationController::class, 'markAllRead'])->name('notifications.mark-all-read');
+    Route::delete('/notifications/{notification}', [Admin\NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::get('/notifications/unread-count', [Admin\NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
+
+    // Admin chat monitor
+    Route::get('/chat', [Admin\ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{conversation}', [Admin\ChatController::class, 'show'])->name('chat.show');
+
+    // Admin helpdesk
+    Route::get('/helpdesk', [Admin\HelpdeskController::class, 'index'])->name('helpdesk.index');
+    Route::get('/helpdesk/{ticket}', [Admin\HelpdeskController::class, 'show'])->name('helpdesk.show');
+    Route::post('/helpdesk/{ticket}/reply', [Admin\HelpdeskController::class, 'reply'])->name('helpdesk.reply');
+    Route::patch('/helpdesk/{ticket}', [Admin\HelpdeskController::class, 'update'])->name('helpdesk.update');
 
     Route::get('/blog',              [Admin\BlogController::class, 'index'])->name('blog.index');
     Route::get('/blog/create',       [Admin\BlogController::class, 'create'])->name('blog.create');

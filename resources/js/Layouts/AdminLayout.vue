@@ -95,6 +95,36 @@
           Contact Inquiries
         </AdminNavLink>
 
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mt-4 mb-2">Communication</p>
+
+        <AdminNavLink href="/admin/notifications" :active="isActive('/admin/notifications')">
+          <template #icon>
+            <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </template>
+          Notifications
+          <span v-if="$page.props.unread_notifications > 0" class="ml-auto bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">{{ $page.props.unread_notifications }}</span>
+        </AdminNavLink>
+
+        <AdminNavLink href="/admin/chat" :active="isActive('/admin/chat')">
+          <template #icon>
+            <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </template>
+          Chat Monitor
+        </AdminNavLink>
+
+        <AdminNavLink href="/admin/helpdesk" :active="isActive('/admin/helpdesk')">
+          <template #icon>
+            <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+            </svg>
+          </template>
+          Helpdesk
+        </AdminNavLink>
+
         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mt-4 mb-2">Config</p>
 
         <AdminNavLink href="/admin/settings" :active="isActive('/admin/settings')">
@@ -133,6 +163,12 @@
           <h1 class="text-base font-semibold text-slate-900">{{ pageTitle }}</h1>
         </div>
         <div class="flex items-center gap-3">
+          <Link href="/admin/notifications" class="relative text-slate-400 hover:text-slate-700 p-1">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <span v-if="$page.props.unread_notifications > 0" class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">{{ $page.props.unread_notifications }}</span>
+          </Link>
           <Link href="/" target="_blank" class="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5 font-medium">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -166,6 +202,9 @@ const pageTitle = computed(() => {
   if (path.startsWith('/admin/blog'))       return 'Blog';
   if (path.startsWith('/admin/settings'))            return 'Settings';
   if (path.startsWith('/admin/contact-inquiries'))   return 'Contact Inquiries';
+  if (path.startsWith('/admin/notifications'))       return 'Notifications';
+  if (path.startsWith('/admin/chat'))                return 'Chat Monitor';
+  if (path.startsWith('/admin/helpdesk'))            return 'Helpdesk';
   if (path.includes('/packages'))                    return 'Mentor Packages';
   return 'Admin Panel';
 });
