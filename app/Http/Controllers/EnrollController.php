@@ -7,6 +7,7 @@ use App\Mail\MentorEnrollmentNotifMail;
 use App\Models\Package;
 use App\Models\PackageRegister;
 use App\Services\AdminNotificationService;
+use App\Services\UserNotificationService;
 use Illuminate\Support\Facades\Mail;
 
 class EnrollController extends Controller
@@ -56,6 +57,16 @@ class EnrollController extends Controller
                 Mail::to($package->user->email)->send(new MentorEnrollmentNotifMail($user, $package));
             }
         } catch (\Exception $e) {}
+
+        // Notify mentor via portal notification
+        if ($package->user) {
+            UserNotificationService::mentorNewEnrollment(
+                $package->user->id,
+                $user->name,
+                $package->title,
+                $user->slug
+            );
+        }
 
         // Admin notification
         AdminNotificationService::newEnrollment($user->name, $package->title, $package->user?->name ?? 'N/A');

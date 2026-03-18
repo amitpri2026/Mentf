@@ -42,6 +42,9 @@ class HandleInertiaRequests extends Middleware
             'unread_notifications' => fn () => $request->user()?->isAdmin()
                 ? \App\Models\AdminNotification::whereNull('read_at')->count()
                 : 0,
+            'unread_user_notifications' => fn () => ($request->user() && !$request->user()->isAdmin())
+                ? \App\Models\UserNotification::where('user_id', $request->user()->id)->whereNull('read_at')->count()
+                : 0,
         ];
     }
 }

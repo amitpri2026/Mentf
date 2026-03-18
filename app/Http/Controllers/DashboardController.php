@@ -75,8 +75,10 @@ class DashboardController extends Controller
                 'currency'    => $e->currency,
                 'enrolled_at' => $e->enrolled_at?->format('M d, Y'),
                 'user'        => [
+                    'id'                => $e->user->id,
                     'name'              => $e->user->name,
                     'email'             => $e->user->email,
+                    'slug'              => $e->user->slug,
                     'profile_photo_url' => $e->user->profile_photo_url,
                 ],
                 'package' => [

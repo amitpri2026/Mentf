@@ -148,6 +148,7 @@
                 <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Status</th>
                 <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Amount</th>
                 <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Enrolled On</th>
+                <th class="px-4 py-3"></th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
@@ -188,6 +189,14 @@
                   {{ e.currency }} {{ e.amount_paid }}
                 </td>
                 <td class="px-4 py-3.5 text-slate-500">{{ e.enrolled_at }}</td>
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center gap-2">
+                    <Link v-if="e.user.slug" :href="`/mentees/${e.user.slug}`"
+                      class="text-xs text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap">Profile</Link>
+                    <button @click="startChat(e.user.id)"
+                      class="text-xs text-slate-500 hover:text-blue-600 font-medium whitespace-nowrap">Chat</button>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -206,7 +215,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({
@@ -220,6 +229,10 @@ const filterStatus    = ref('');
 
 function enrollmentsForPackage(pkgId) {
   return props.recentEnrollments.filter(e => e.package.id === pkgId);
+}
+
+function startChat(userId) {
+  router.post('/chat/start', { other_user_id: userId });
 }
 
 const filteredEnrollments = computed(() => {

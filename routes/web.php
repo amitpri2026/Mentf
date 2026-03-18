@@ -7,6 +7,8 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogCommentController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CmsPagesController;
+use App\Http\Controllers\MenteeProfileController;
+use App\Http\Controllers\UserNotificationController;
 use App\Http\Controllers\EnrollController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -64,6 +66,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat/{conversation}', [ChatController::class, 'show'])->name('chat.show');
     Route::post('/chat/{conversation}/send', [ChatController::class, 'send'])->name('chat.send');
     Route::get('/chat/{conversation}/poll', [ChatController::class, 'poll'])->name('chat.poll');
+
+    // User notifications
+    Route::get('/notifications', [UserNotificationController::class, 'index'])->name('user.notifications.index');
+    Route::post('/notifications/mark-all-read', [UserNotificationController::class, 'markAllRead'])->name('user.notifications.mark-all-read');
+    Route::delete('/notifications/{notification}', [UserNotificationController::class, 'destroy'])->name('user.notifications.destroy');
+
+    // Mentee profile (mentor/admin view)
+    Route::get('/mentees/{mentee}', [MenteeProfileController::class, 'show'])->name('mentees.show');
 
     // Helpdesk routes
     Route::get('/helpdesk', [HelpdeskController::class, 'index'])->name('helpdesk.index');

@@ -80,6 +80,18 @@
                 Dashboard
               </Link>
 
+              <!-- Notification bell (mentor/mentee only) -->
+              <Link v-if="$page.props.auth.user.role !== 'admin'" href="/notifications"
+                class="hidden sm:flex relative p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                <span v-if="$page.props.unread_user_notifications > 0"
+                  class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {{ $page.props.unread_user_notifications > 9 ? '9+' : $page.props.unread_user_notifications }}
+                </span>
+              </Link>
+
               <!-- Avatar dropdown -->
               <div class="hidden sm:block relative" ref="userMenuRef">
                 <button @click="showUserMenu = !showUserMenu" class="flex items-center gap-2 pl-1 pr-2 py-1 rounded-lg hover:bg-slate-100 transition-colors">
@@ -90,12 +102,30 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div v-show="showUserMenu" class="absolute top-full right-0 w-48 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50">
+                <div v-show="showUserMenu" class="absolute top-full right-0 w-52 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50">
                   <div class="px-3.5 py-2 border-b border-slate-100 mb-1">
                     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">{{ $page.props.auth.user.role }}</p>
                     <p class="text-sm font-medium text-slate-800 truncate">{{ $page.props.auth.user.name }}</p>
                   </div>
-                  <button @click="logout" class="w-full text-left px-3.5 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors">Logout</button>
+                  <Link href="/notifications" @click="showUserMenu = false"
+                    class="flex items-center justify-between w-full px-3.5 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                    <span>Notifications</span>
+                    <span v-if="$page.props.unread_user_notifications > 0"
+                      class="bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+                      {{ $page.props.unread_user_notifications }}
+                    </span>
+                  </Link>
+                  <Link href="/chat" @click="showUserMenu = false"
+                    class="block w-full px-3.5 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors text-left">
+                    Messages
+                  </Link>
+                  <Link href="/helpdesk" @click="showUserMenu = false"
+                    class="block w-full px-3.5 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors text-left">
+                    Support
+                  </Link>
+                  <div class="border-t border-slate-100 mt-1 pt-1">
+                    <button @click="logout" class="w-full text-left px-3.5 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors">Logout</button>
+                  </div>
                 </div>
               </div>
             </template>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Conversation;
 use App\Models\ChatMessage;
 use App\Models\User;
+use App\Services\UserNotificationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -75,6 +76,17 @@ class ChatController extends Controller
             'message'   => $request->message,
         ]);
         $conversation->update(['last_message_at' => now()]);
+
+        // Notify the other participant
+        $recipientId = $user->id === $conversation->mentor_id
+            ? $conversation->mentee_id
+            : $conversation->mentor_id;
+
+        $preview = strlen($request->message) > 80
+            ? substr($request->message, 0, 80) . '…'
+            : $request->message;
+
+        UserNotificationService::newChatMessage($recipientId, $user->name, $preview, $conversation->id);
 
         return back();
     }

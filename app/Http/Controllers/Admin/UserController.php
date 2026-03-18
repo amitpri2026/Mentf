@@ -68,7 +68,9 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return Inertia::render('Admin/Users/Form', ['user' => $user]);
+        return Inertia::render('Admin/Users/Form', [
+            'user' => $user->only(['id', 'name', 'email', 'role', 'title', 'bio', 'location', 'country', 'is_active', 'is_featured', 'slug']),
+        ]);
     }
 
     public function update(Request $request, User $user)
@@ -79,7 +81,7 @@ class UserController extends Controller
             'role' => 'required|in:admin,mentor,mentee',
         ]);
 
-        $data = $request->only(['name', 'email', 'role', 'title', 'bio', 'location', 'is_active', 'is_featured']);
+        $data = $request->only(['name', 'email', 'role', 'title', 'bio', 'location', 'country', 'is_active', 'is_featured']);
         if ($request->password) {
             $data['password'] = Hash::make($request->password);
         }
