@@ -67,7 +67,7 @@ class AuthController extends Controller
             }
             $mail->send(new WelcomeMail($user));
         } catch (\Exception $e) {
-            // Don't fail registration if email fails
+            \Log::error('Registration welcome email failed: ' . $e->getMessage());
         }
 
         // Admin notification
